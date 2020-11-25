@@ -45,7 +45,7 @@ public class WelcomeServlet extends HttpServlet {
 		// DB接続処理は例外処理が必須
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS)) {
 			// 接続に成功した場合、success.jspファイルにフォワード
-//			forword = "/WEB-INF/jsp/success.jsp";
+			//			forword = "/WEB-INF/jsp/success.jsp";
 			forword = "index.jsp";
 		} catch (SQLException e) {
 			// 接続に失敗した場合、fall.jspファイルにフォワード
@@ -61,7 +61,33 @@ public class WelcomeServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		//		doGet(request, response);
+
+		// DB接続情報の設定
+		final String URL = "jdbc:mysql://localhost:3306/clibrary?serverTimezone=JST";
+		final String USER = "masayuki";
+		final String PASS = "fukuda";
+
+		String forword = "";
+		// URLエンコーディングの文字コードを設定
+		request.setCharacterEncoding("utf-8");
+		// name="target"のデータを抽出(どこからの通信かをチェックする)
+		String target = request.getParameter("target");
+
+		// アクセス元のページによって処理を分岐
+		switch (target) {
+		case "register": // target=registerの場合
+			// フォワード先を指定
+			forword = "/WEB-INF/jsp/test.jsp";
+			break;
+		case "login": // target=loginの場合
+			// フォワード先を指定
+			forword = "/WEB-INF/jsp/test2.jsp";
+			break;
+		}
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher(forword);
+		dispatcher.forward(request, response);
 	}
 
 }
