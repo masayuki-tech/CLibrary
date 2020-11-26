@@ -78,11 +78,11 @@ public class WelcomeServlet extends HttpServlet {
 		switch (target) {
 		case "register": // target=registerの場合
 			// フォワード先を指定
-			forword = "/WEB-INF/jsp/test.jsp";
+			forword = "/CLibrary/LoginServlet";
 			break;
 		case "login": // target=loginの場合
 			// フォワード先を指定
-			forword = "/WEB-INF/jsp/test2.jsp";
+			forword = "/CLibrary/LoginServlet";
 			break;
 		}
 

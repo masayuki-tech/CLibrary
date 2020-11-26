@@ -15,8 +15,10 @@
 				</div>
 				<div class="header_bottom_main">
 					<div class="header_bottom_right_list">
-						<form name="result" method="post" action="/CLibrary/WelcomeServlet?target=register">
+						<form name="result" method="get" action="/CLibrary/WelcomeServlet?target=register">
 						<a class="right_list_new_user" href="javascript:result.submit()">新規登録</a>
+						</form>
+						<form name="result" method="get" action="/CLibrary/WelcomeServlet?target=login">
 						<a class="right_list_crrent_user" href="javascript:result.submit()">ログイン</a>
 						</form>
 					</div>
