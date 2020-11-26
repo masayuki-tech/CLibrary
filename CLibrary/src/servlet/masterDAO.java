@@ -1,34 +1,31 @@
 package servlet;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
+import model.booksDTO;
 public class masterDAO {
-	public boolean insert(masterDAO booksDTO) {
-		InitialContext ic;
-		DataSource ds=null;
+	public boolean insert(booksDTO booksDTO) {
+
 
 		// データ登録用のSQL文(プレースホルダ利用)
-		final String SQL = "insert into books values(?,?)";
+		final String SQL = "insert into books values(?,?,?,?)";
 
 
-		// データベース接続およびプリペアードステートメントの作成
-		try {
-			ic=new InitialContext();
-			ds=(DataSource)ic.lookup("java:/comp/env/jdbc:db");
+		   final String URL="jdbc:mysql://localhost:3306/project?serverTimezone=JST";
+		   final String USER="javauser";
+		   final String PASS="java08pass";
 
-			try(Connection conn=ds.getConnection();
+
+			try(Connection conn=DriverManager.getConnection(URL,USER,PASS);
 					PreparedStatement pstm = conn.prepareStatement(SQL)){
 
 			// JavaBeans内のデータを取り出し、プレースホルダに代入
-			pstm.setInt(1, booksDTO.getBooks_Id());
-			pstm.setString(2, booksDTO.getBook_Name());
-			pstm.setString(3, booksDTO.getJan());
+			pstm.setInt(1, booksDTO.getBook_Id());
+			pstm.setString(2, booksDTO.getJan());
+			pstm.setString(3, booksDTO.getBook_Name());
 			pstm.setString(4, booksDTO.getPur_Date());
 
 
@@ -46,7 +43,6 @@ public class masterDAO {
 				// 例外が発生したので、falseを返す
 				return false;
 			}
-		}catch(NamingException e) {
-			return false;
 		}
-		}}
+		}
+

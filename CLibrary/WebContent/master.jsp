@@ -9,11 +9,12 @@
 <body>
 <a>マスターメニュー</a>
 <a>本の登録</a>
-<form action="/servlet/masterServlet" method="post">
+<form action="/CLibrary/masterServlet" method="post">
 本のID<input type="text" name="book_id"><br>
 jan：<input type="text" name="jan"><br>
 本の名前：<input type="text" name="book_name"><br>
-購入日：<input type="number" name="pur_date"><br>
+購入日：<input type="text" name="pur_date"><br>
 <input type="submit" value="登録">
+</form>
 </body>
 </html>

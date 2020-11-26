@@ -33,10 +33,9 @@ public class masterServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		RequestDispatcher dispatcher=
-				request.getRequestDispatcher
-				("master.jsp");
-		dispatcher.forward(request,response);
+		//RequestDispatcher dispatcher=
+				//("master.jsp");
+		//dispatcher.forward(request,response);
 	}
 
 	/**
@@ -54,14 +53,14 @@ public class masterServlet extends HttpServlet {
 		String book_name = request.getParameter("book_name");
 		String pur_date = request.getParameter("pur_date");
 		
-		// もしid列のデータがない場合
+		// もしbook_id列のデータがない場合
 				if (book_id == null || book_id == "") {
 					// エラーメッセージをセッションスコープに保存
 					session.setAttribute("error", "分類番号が入力されていません。再度入力してください");
 					// 入力用フォームに再度リダイレクト
 					response.sendRedirect("master.jsp");
 
-				// id列にデータがある場合
+				// book_id列にデータがある場合
 				} else {
 					// セッションスコープに保存しているエラーメッセージを削除
 					session.removeAttribute("error");
