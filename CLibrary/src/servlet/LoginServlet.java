@@ -40,7 +40,6 @@ public class LoginServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 
 
-
 		//ログイン画面にフォワード（login.jsp）
 		RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/login.jsp");
 		dispatcherLogin.forward(request, response);
