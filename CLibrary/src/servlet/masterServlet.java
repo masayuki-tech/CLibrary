@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import model.booksDTO;
+import model.rentlogsDTO;
 
 /**
  * Servlet implementation class masterServlet
@@ -33,9 +36,26 @@ public class masterServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		//RequestDispatcher dispatcher=
-				//("master.jsp");
-		//dispatcher.forward(request,response);
+		//RequestDispatcher dispatcher=("master.jsp");
+		//dispatcher.forward(request,response)
+		
+		
+		String action =request.getParameter("action");
+		if(action.equals("done")) {
+			HttpSession session = request.getSession();
+			
+			
+			
+			// データベース処理を行うDAOを生成
+			masterDAO masterDAO = new masterDAO();
+			List<rentlogsDTO> limitOverList=new ArrayList<>();
+			limitOverList=masterDAO.getSearch();
+			session.setAttribute("limitOver", limitOverList);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("limitover.jsp");
+			dispatcher.forward(request, response);
+			
+		}
+		
 	}
 
 	/**
@@ -56,7 +76,7 @@ public class masterServlet extends HttpServlet {
 		// もしbook_id列のデータがない場合
 				if (book_id == null || book_id == "") {
 					// エラーメッセージをセッションスコープに保存
-					session.setAttribute("error", "分類番号が入力されていません。再度入力してください");
+					session.setAttribute("error", "入力されていません。再度入力してください");
 					// 入力用フォームに再度リダイレクト
 					response.sendRedirect("master.jsp");
 
