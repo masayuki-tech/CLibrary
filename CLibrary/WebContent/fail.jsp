@@ -6,16 +6,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>エラー</title>
+<title>登録エラー</title>
 </head>
 <body>
-<h2>失敗しました。</h2>
+<h2>新規登録に失敗しました。</h2>
+<h3>もう一度やり直して下さい</h3>
 
 
 
 
-
-	<button onclick="location.href='//////////'">Ｍｙページへ</button>
-	<button onclick="location.href='//////////'">トップ画面へ</button>
+	<button onclick="location.href='index.jsp'">トップ画面へ</button>
 </body>
 </html>

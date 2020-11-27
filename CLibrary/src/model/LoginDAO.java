@@ -5,19 +5,17 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoginDAO {
 
 	//ＤＢ接続情報の設定
-	final String URL = "jdbc:mysql://localhost:3306/project?serverTimezone=JST";
-	//	final String URL = "jdbc:mysql://172.16.71.10●:3306/project?serverTimezone=JST";
-	// 	final String USER="";
-	//	final String PASS="";
+	//final String URL = "jdbc:mysql://localhost:3306/project?serverTimezone=JST";
+	// 	final String USER="javauser";
+	//	final String PASS="java06pass";
 
-	final String USER = "javauser";
-	final String PASS = "java06pass";
+	final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
+	final String USER = "CLibary";
+	final String PASS = "CLibrary01";
 
 	//ＳＱＬ文
 	final String LOGIN_SQL = "select staff_id,pass,name,gender from staffs where staff_id=? && pass=?";//ログイン用
@@ -26,15 +24,17 @@ public class LoginDAO {
 
 	//ログイン*****************************************************************
 	//ログイン用のメソッド（引数：staffId,pass　戻り値：List<staffsDTO>）
-	public List<staffsDTO> getLoginDAO(String staffId, String pass) {
+	public staffsDTO getLoginDAO(String staffId, String pass) {
 
 		//DBに接続して、ログイン可能かどうかのチェック
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 				PreparedStatement pstm = conn.prepareStatement(LOGIN_SQL)) {
 
-			//作成したDTOを格納するArrayListを生成
-			List<staffsDTO> loginList = new ArrayList<>();
+//			//作成したDTOを格納するArrayListを生成
+//			List<staffsDTO> loginList = new ArrayList<>();
 
+			//staffsＤＴＯ
+			staffsDTO sd=new staffsDTO();
 			//？に差し込む
 			pstm.setInt(1, Integer.parseInt(staffId));
 			pstm.setString(2, pass);
@@ -51,13 +51,15 @@ public class LoginDAO {
 				int gender = rs.getInt("gender");//性別
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
-				staffsDTO sd = new staffsDTO(staff_id, name, pass, gender);
+				sd = new staffsDTO(staff_id, name, pass, gender);
 
-				//データが格納されたDTOオブジェクトをArrayListに追加保存
-				loginList.add(sd);
+//				//データが格納されたDTOオブジェクトをArrayListに追加保存
+//				loginList.add(sd);
+//			}
+
+
 			}
-			return loginList;
-
+			return sd;
 		} catch (SQLException e) {
 			return null;
 		}

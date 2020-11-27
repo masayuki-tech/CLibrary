@@ -36,9 +36,9 @@ public class WelcomeServlet extends HttpServlet {
 		//		response.getWriter().append("Served at: ").append(request.getContextPath());
 
 		// DB接続情報の設定
-		final String URL = "jdbc:mysql://localhost:3306/clibrary?serverTimezone=JST";
-		final String USER = "masayuki";
-		final String PASS = "fukuda";
+		final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
+		final String USER = "CLibary";
+		final String PASS = "CLibrary01";
 
 		String forword = "";
 
@@ -49,7 +49,7 @@ public class WelcomeServlet extends HttpServlet {
 			forword = "index.jsp";
 		} catch (SQLException e) {
 			// 接続に失敗した場合、fall.jspファイルにフォワード
-			forword = "/WEB-INF/jsp/fall.jsp";
+			forword = "fail.jsp";
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forword);
 		dispatcher.forward(request, response);
@@ -64,9 +64,9 @@ public class WelcomeServlet extends HttpServlet {
 		//		doGet(request, response);
 
 		// DB接続情報の設定
-		final String URL = "jdbc:mysql://localhost:3306/clibrary?serverTimezone=JST";
-		final String USER = "masayuki";
-		final String PASS = "fukuda";
+		final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
+		final String USER = "CLibary";
+		final String PASS = "CLibrary01";
 
 		String forword = "";
 		// URLエンコーディングの文字コードを設定

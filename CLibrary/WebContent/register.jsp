@@ -21,13 +21,15 @@
 <input type="hidden" name="target" value="register">
 		ＩＤ：<input type="number" name="staffId" required><br>
 		パスワード：<input type="password" name="pass" required><br>
+		確認：<input type="password" name="pass2" required><br>
 		氏名：<input type="text" name="name" required><br>
 		性別：<input type="radio" name="gender" value="1">男性
 			<input type="radio" name="gender" value="2">女性
+			<input type="radio" name="gender" value="0" required>未回答
 			<input type="submit" value="登録">
 	</form>
 
-<button onclick="location.href='///////////'">トップ画面へ</button>
+<button onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
 
 </body>
 </html>
