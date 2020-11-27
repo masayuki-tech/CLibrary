@@ -7,7 +7,8 @@ public class booksDTO implements Serializable{
 	private String jan;
 	private String book_name;
 	private String pur_date;
-    private int rent_check;
+  private int rent_check;
+
 	public booksDTO() {}
 	public booksDTO(int book_id,String jan, String book_name,String pur_date, int rent_check) {
 		this.book_id=book_id;
@@ -20,6 +21,11 @@ public class booksDTO implements Serializable{
 	public int getBook_Id() {
 		return book_id;
 	}	
+
+	public int getBook_Id() {
+		return book_id;
+	}
+	
 	public String getJan(){
 		return jan;
 	}
