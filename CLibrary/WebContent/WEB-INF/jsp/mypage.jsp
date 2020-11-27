@@ -8,9 +8,7 @@
 </head>
 <body>
 	<h1>マイページ</h1>
-	
-	
-	
+	<a href="/CLibrary/MypageServlet">借りている本一覧へ</a>
 	<br>
 	<form action="/CLibrary/MypageServlet?target=rent" method="post">
 		<table border="1">
@@ -23,5 +21,7 @@
 			</tr>
 		</table>
 	</form>
+
+
 </body>
 </html>
