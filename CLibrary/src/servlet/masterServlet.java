@@ -38,24 +38,23 @@ public class masterServlet extends HttpServlet {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		//RequestDispatcher dispatcher=("master.jsp");
 		//dispatcher.forward(request,response)
-		
-		
+
+
 		String action =request.getParameter("action");
 		if(action.equals("done")) {
 			HttpSession session = request.getSession();
-			
-			
-			
+
+
 			// データベース処理を行うDAOを生成
 			masterDAO masterDAO = new masterDAO();
 			List<rentlogsDTO> limitOverList=new ArrayList<>();
-			limitOverList=masterDAO.getSearch();
+			limitOverList =masterDAO.getSearch();
 			session.setAttribute("limitOver", limitOverList);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("limitover.jsp");
 			dispatcher.forward(request, response);
-			
+
 		}
-		
+
 	}
 
 	/**
@@ -72,7 +71,7 @@ public class masterServlet extends HttpServlet {
 		String jan = request.getParameter("jan");
 		String book_name = request.getParameter("book_name");
 		String pur_date = request.getParameter("pur_date");
-		
+        int rent_check=0;
 		// もしbook_id列のデータがない場合
 				if (book_id == null || book_id == "") {
 					// エラーメッセージをセッションスコープに保存
@@ -86,7 +85,7 @@ public class masterServlet extends HttpServlet {
 					session.removeAttribute("error");
 
 					// 抽出されたデータを利用してJavaBeansを生成
-					booksDTO booksDTO = new booksDTO(Integer.parseInt(book_id),jan,book_name, pur_date);
+					booksDTO booksDTO = new booksDTO(Integer.parseInt(book_id),jan,book_name, pur_date,rent_check);
 
 					// 生成したJavaBeansをセッションスコープに保存(JSPファイルで共有するため)
 					session.setAttribute("books", booksDTO);

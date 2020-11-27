@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
     <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.List"%>
 <%@ page import="model.rentlogsDTO"%>
-<%
-List<rentlogsDTO> limitOverList = (List<rentlogsDTO>) session.getAttribute("limitOver");
-
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,17 +14,13 @@ List<rentlogsDTO> limitOverList = (List<rentlogsDTO>) session.getAttribute("limi
 <title>Insert title here</title>
 </head>
 <body>
-<body>
+
 	<table border="1">
-	<tr><td>貸出ID</td><td>貸出日付</td><td>返却日</td><td>スタッフID</td><td>本の名前</td></tr>
-	<%for(rentlogsDTO limitOverList1:limitOverList){ %>
-	<tr><td><%= limitOverList1. getRent_Id()%></td>
-	<td><%=limitOverList1.getRent_Date()%></td>
-	<td><%=limitOverList1.getReturn_Date()%></td>
-	<td><%=limitOverList1. getStaff_Id() %></td>
-	<td><%=limitOverList1.getBook_Id()%></td>
-	</tr>
-	<%}%>
+	<tr><td>貸出ID</td><td>貸出日付</td><td>スタッフID</td><td>本の名前</td></tr>
+	<c:forEach var ="a" items="${ limitOver }">
+	<tr><td>${a.getRent_Id() }</td><td>${a.getRent_Date() }</td><td>${a.getBook_Id() }</td><td>${a.getStaff_Id() }</td></tr>
+	</c:forEach>
+
 	</table>
 </body>
 </html>
