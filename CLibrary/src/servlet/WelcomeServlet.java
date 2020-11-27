@@ -36,9 +36,9 @@ public class WelcomeServlet extends HttpServlet {
 		//		response.getWriter().append("Served at: ").append(request.getContextPath());
 
 		// DB接続情報の設定
-		final String URL = "jdbc:mysql://localhost:3306/clibrary?serverTimezone=JST";
-		final String USER = "masayuki";
-		final String PASS = "fukuda";
+		final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
+		final String USER = "CLibary";
+		final String PASS = "CLibrary01";
 
 		String forword = "";
 
