@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +9,9 @@
 </head>
 <body>
 	<h1>マイページ</h1>
+	<h2>ようこそ<c:out value="${sd.name }"/>さん</h2>
 	<a href="/CLibrary/MypageServlet">借りている本一覧へ</a>
+
 	<br>
 	<form action="/CLibrary/MypageServlet?target=rent" method="post">
 		<table border="1">
@@ -21,7 +24,5 @@
 			</tr>
 		</table>
 	</form>
-
-
 </body>
 </html>

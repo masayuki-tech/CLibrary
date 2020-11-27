@@ -1,16 +1,16 @@
-package model;
+package dto;
 
 import java.io.Serializable;
 
-public class staffsDTO implements Serializable{
+public class StaffsDTO implements Serializable{
 private int staff_id;
 private String mail;
 private String pass;
 private String name;
 private int gender;
 
-public staffsDTO() {}
-public staffsDTO(int staff_id,String mail,String pass, String name,int gender) {
+public StaffsDTO() {}
+public StaffsDTO(int staff_id,String mail,String pass, String name,int gender) {
 	this.staff_id=staff_id;
 	this.mail=mail;
 	this.pass=pass;

@@ -1,4 +1,4 @@
-package servlet;
+package model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,9 +10,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.booksDTO;
-import model.rentlogsDTO;
-public class masterDAO {
+import dto.BooksDTO;
+import dto.RentlogsDTO;
+public class MasterDAO {
 	// データ登録用のSQL文(プレースホルダ利用)
 			final String SQL = "insert into books values(?,?,?,?)";//本の登録のSQL文
 			final String SEARCH="select * from rentlogs";//rentlogsの返却されていない検索
@@ -22,16 +22,16 @@ public class masterDAO {
 			final String PASS="java08pass";
 
 
-	public boolean insert(booksDTO booksDTO) {
+	public boolean insert(BooksDTO BooksDTO) {
 
 			try(Connection conn=DriverManager.getConnection(URL,USER,PASS);
 					PreparedStatement pstm = conn.prepareStatement(SQL)){
 
 			// JavaBeans内のデータを取り出し、プレースホルダに代入
-			pstm.setInt(1, booksDTO.getBook_Id());
-			pstm.setString(2, booksDTO.getJan());
-			pstm.setString(3, booksDTO.getBook_Name());
-			pstm.setString(4, booksDTO.getPur_Date());
+			pstm.setInt(1, BooksDTO.getBook_Id());
+			pstm.setString(2, BooksDTO.getJan());
+			pstm.setString(3, BooksDTO.getBook_Name());
+			pstm.setString(4, BooksDTO.getPur_Date());
 
 
 			// SQL文の実行(登録した行数が返される)
@@ -50,9 +50,9 @@ public class masterDAO {
 			}
 	}
 
-	public List<rentlogsDTO> getSearch() {//二週間以上借りている人の検索してリストに格納
+	public List<RentlogsDTO> getSearch() {//二週間以上借りている人の検索してリストに格納
 
-		List<rentlogsDTO>limitOverList=new ArrayList<>();
+		List<RentlogsDTO>limitOverList=new ArrayList<>();
 
 		try(Connection conn=DriverManager.getConnection(URL,USER,PASS);
 				Statement pstm = conn.createStatement()){
@@ -74,7 +74,7 @@ public class masterDAO {
 					String return_date=ra.getString("return_date");
 					int book_id=ra.getInt("book_id");
 					int staff_id=ra.getInt("staff_id");
-					rentlogsDTO rentlogs = new rentlogsDTO(rent_id,rent_date,return_date,book_id,staff_id);
+					RentlogsDTO rentlogs = new RentlogsDTO(rent_id,rent_date,return_date,book_id,staff_id);
 					limitOverList.add(rentlogs);
 				}
 			}

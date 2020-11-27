@@ -1,16 +1,16 @@
-package model;
+package dto;
 
 import java.io.Serializable;
 
-public class booksDTO implements Serializable{
+public class BooksDTO implements Serializable{
 	private int book_id;
 	private String jan;
 	private String book_name;
 	private String pur_date;
   private int rent_check;
 
-	public booksDTO() {}
-	public booksDTO(int book_id,String jan, String book_name,String pur_date, int rent_check) {
+	public BooksDTO() {}
+	public BooksDTO(int book_id,String jan, String book_name,String pur_date, int rent_check) {
 		this.book_id=book_id;
 		this.jan=jan;
 		this.book_name=book_name;

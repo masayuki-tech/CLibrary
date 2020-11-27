@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import dto.StaffsDTO;
+
 public class LoginDAO {
 
 	//ＤＢ接続情報の設定
@@ -18,26 +20,23 @@ public class LoginDAO {
 	final String PASS = "CLibrary01";
 
 	//ＳＱＬ文
-	final String LOGIN_SQL = "select staff_id,pass,name,gender from staffs where staff_id=? && pass=?";//ログイン用
-	final String REGISTER_SQL = "insert into staffs values(?,?,?,?)";//新規登録用
-	final String PROFILE_SQL = "select staff_id,pass,name,gender from staffs where staff_id=? && pass=? && name=?)";
-
+	final String LOGIN_SQL = "select staff_id,mail,pass,name,gender from staffs where mail=? && pass=?";//ログイン用
+	final String REGISTER_SQL = "insert into staffs(mail,pass,name,gender) values(?,?,?,?)";//新規登録用
+	final String PROFILE_SQL = "select staff_id,mail,pass,name,gender from staffs where name=? && mail=? && pass=? && gender=?";
+	final String MYPAGE_SQL="select books.book_name,rentlogs.rent_date,rentlogs.return_date from books join rentlogs on books.book_id=rentlogs.book_id where rentlogs.staff_id=? && books.rent_check=1";
 	//ログイン*****************************************************************
-	//ログイン用のメソッド（引数：staffId,pass　戻り値：List<staffsDTO>）
-	public staffsDTO getLoginDAO(String staffId, String pass) {
+	public StaffsDTO getLoginDAO(String mail, String pass) {
 
 		//DBに接続して、ログイン可能かどうかのチェック
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 				PreparedStatement pstm = conn.prepareStatement(LOGIN_SQL)) {
 
-//			//作成したDTOを格納するArrayListを生成
-//			List<staffsDTO> loginList = new ArrayList<>();
+			//staffsDTOのインスタンスを作成
+			StaffsDTO sd = new StaffsDTO();
 
-			//staffsＤＴＯ
-			staffsDTO sd=new staffsDTO();
 			//？に差し込む
-			pstm.setInt(1, Integer.parseInt(staffId));
-			pstm.setString(2, pass);
+			pstm.setString(1, mail);//メール
+			pstm.setString(2, pass);//パスワード
 
 			//SQL文の実行(ResultSetの取得)
 			ResultSet rs = pstm.executeQuery();
@@ -46,96 +45,82 @@ public class LoginDAO {
 			while (rs.next()) {
 				//各列のデータをDTOにセッターを使って保存
 				int staff_id = rs.getInt("staff_id"); //ＩＤ
+				mail = rs.getString("mail");//メールアドレス
 				pass = rs.getString("pass");//パスワード
 				String name = rs.getString("name");//名前
 				int gender = rs.getInt("gender");//性別
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
-				sd = new staffsDTO(staff_id, name, pass, gender);
-
-//				//データが格納されたDTOオブジェクトをArrayListに追加保存
-//				loginList.add(sd);
-//			}
-
-
+				sd = new StaffsDTO(staff_id, mail, pass, name, gender);
 			}
 			return sd;
+
 		} catch (SQLException e) {
 			return null;
 		}
 	}
 
 	//新規登録******************************************************************
-	//新規登録して、ユーザーのプロフィールをArrayListで返すメソッド
-	public boolean getRegisterDAO(int staffId, String pass, String name, int gender) {
+	public boolean getRegisterDAO(String name, String mail, String pass, int gender) {
 		//DBに接続して、新規登録する
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 				PreparedStatement pstm = conn.prepareStatement(REGISTER_SQL)) {
 
 			//取り出したレコードを保存するためのDTOオブジェクトの生成
-			staffsDTO sd = new staffsDTO();
-
-			//作成したDTOを格納するArrayListを生成
-			staffsDTO list = new staffsDTO();
+			StaffsDTO sd = new StaffsDTO();
 
 			//？に差し込む
-			pstm.setInt(1, staffId);
+			pstm.setString(1, mail);//メールアドレス
 			pstm.setString(2, pass);//パスワード
 			pstm.setString(3, name);//名前
 			pstm.setInt(4, gender);//性別
 
-//			//SQL文の実行(ResultSetの取得)
-			if (pstm.executeUpdate() !=1) {
+			//SQL文の実行(ResultSetの取得)
+			if (pstm.executeUpdate() != 1) {
 				return false;
-			}else {
+			} else {
 				return true;
 			}
-//			} else {
-//				//新規登録したアカウントの情報を取得する
-//				list = getList(staffId, name, pass, gender);
-//				return list;
-//			}
 
 		} catch (SQLException e) {
 			return false;
 		}
-
 	}
 
-//	//新規登録したアカウントの情報を取得****************************************************
-//	public staffsDTO getList(int staffId, String name, String pass, int gender) {
-//
-//		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
-//				PreparedStatement pstm = conn.prepareStatement(PROFILE_SQL)) {
-//
-//			staffsDTO sd=null;
-//
-//			//？に差し込む
-//			pstm.setInt(1, staffId);//ＩＤ
-//			pstm.setString(2, pass);//パスワード
-//			pstm.setString(3, name);//名前
-//
-//			//SQL文の実行(ResultSetの取得)
-//			ResultSet rs = pstm.executeQuery();
-//
-//			//ResultSetのフェッチ処理（取り出すデータがある間、繰り返す)
-//			while (rs.next()) {
-//				//各列のデータをDTOにセッターを使って保存
-//				int staff_id = rs.getInt("staff_id"); //ＩＤ
-//				pass = rs.getString("pass");//パスワード
-//				name = rs.getString("name");//名前
-//				gender = rs.getInt("gender");//性別
-//
-//				//取り出したレコードを保存するためのDTOオブジェクトの生成
-//				sd = new staffsDTO(staff_id, name, pass, gender);
-//
-//				return sd;
-//			}
-//			return sd;
-//
-//		} catch (SQLException e) {
-//			return null;
-//		}
-//	}
+	//新規登録したアカウントの情報を取得****************************************************
+	public StaffsDTO getUserDAO(String name, String mail, String pass, int gender) {
 
+		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
+				PreparedStatement pstm = conn.prepareStatement(PROFILE_SQL)) {
+
+			//？に差し込む
+			pstm.setString(1, name);//名前
+			pstm.setString(2, mail);//メール
+			pstm.setString(3, pass);//パスワード
+			pstm.setInt(4, gender);//性別
+
+			//SQL文の実行(ResultSetの取得)
+			ResultSet rs = pstm.executeQuery();
+
+			//staffsDTOのインスタンスを生成
+			StaffsDTO sd = new StaffsDTO();
+
+			//ResultSetのフェッチ処理
+			while (rs.next()) {
+				//各列のデータをDTOにセッターを使って保存
+				int staff_id = rs.getInt("staff_id"); //ＩＤ
+				mail = rs.getString("mail");//メールアドレス
+				pass = rs.getString("pass");//パスワード
+				name = rs.getString("name");//名前
+				gender = rs.getInt("gender");//性別
+
+				//取り出したレコードを保存するためのDTOオブジェクトの生成
+				sd = new StaffsDTO(staff_id, mail, pass, name, gender);
+			}
+			return sd;
+
+		} catch (SQLException e) {
+			return null;
+		}
+	}
 }

@@ -12,20 +12,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.booksDTO;
-import model.rentlogsDTO;
+import dto.BooksDTO;
+import dto.RentlogsDTO;
+import model.MasterDAO;
 
 /**
- * Servlet implementation class masterServlet
+ * Servlet implementation class MasterServlet
  */
-@WebServlet("/masterServlet")
-public class masterServlet extends HttpServlet {
+@WebServlet("/MasterServlet")
+public class MasterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public masterServlet() {
+    public MasterServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -46,11 +47,11 @@ public class masterServlet extends HttpServlet {
 
 
 			// データベース処理を行うDAOを生成
-			masterDAO masterDAO = new masterDAO();
-			List<rentlogsDTO> limitOverList=new ArrayList<>();
-			limitOverList =masterDAO.getSearch();
+			MasterDAO MasterDAO = new MasterDAO();
+			List<RentlogsDTO> limitOverList=new ArrayList<>();
+			limitOverList =MasterDAO.getSearch();
 			session.setAttribute("limitOver", limitOverList);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("limitover.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/limitover.jsp");
 			dispatcher.forward(request, response);
 
 		}
@@ -77,7 +78,7 @@ public class masterServlet extends HttpServlet {
 					// エラーメッセージをセッションスコープに保存
 					session.setAttribute("error", "入力されていません。再度入力してください");
 					// 入力用フォームに再度リダイレクト
-					response.sendRedirect("master.jsp");
+					response.sendRedirect("/WEB-INF/jsp/master.jsp");
 
 				// book_id列にデータがある場合
 				} else {
@@ -85,24 +86,24 @@ public class masterServlet extends HttpServlet {
 					session.removeAttribute("error");
 
 					// 抽出されたデータを利用してJavaBeansを生成
-					booksDTO booksDTO = new booksDTO(Integer.parseInt(book_id),jan,book_name, pur_date,rent_check);
+					BooksDTO BooksDTO = new BooksDTO(Integer.parseInt(book_id),jan,book_name, pur_date,rent_check);
 
 					// 生成したJavaBeansをセッションスコープに保存(JSPファイルで共有するため)
-					session.setAttribute("books", booksDTO);
+					session.setAttribute("books", BooksDTO);
 
 					// データベース処理を行うDAOを生成
-					masterDAO masterDAO = new masterDAO();
+					MasterDAO MasterDAO = new MasterDAO();
 
 					String forwardPath = "";
 
 					// DAO内に定義されているデータ登録用のメソッドを実行し、その結果を保存
-					boolean isInsert = masterDAO.insert(booksDTO);
+					boolean isInsert = MasterDAO.insert(BooksDTO);
 
 					// メソッドの実行結果によって、切り替えるJSPファイル名を決定
 					if (isInsert) {
-						forwardPath = "addsuccess.jsp";
+						forwardPath = "/WEB-INF/jsp/addsuccess.jsp";
 					} else {
-						forwardPath ="addfailure.jsp";
+						forwardPath ="/WEB-INF/jsp/addfailure.jsp";
 					}
 
 					// JSPファイルに処理を切り替え

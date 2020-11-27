@@ -6,7 +6,7 @@
 
     <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.List"%>
-<%@ page import="model.rentlogsDTO"%>
+<%@ page import="dto.RentlogsDTO"%>
 <!DOCTYPE html>
 <html>
 <head>

@@ -2,6 +2,8 @@ package servlet;
 
 //ログイン系の補助サーブレット
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,14 +13,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dto.BooksDTO;
+import dto.StaffsDTO;
 import model.LoginDAO;
-import model.staffsDTO;
 
 /**
  * Servlet implementation class LoginServlet
  */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
+
+	//管理者の情報
+	final String MM = "aaa@aaa";
+	final String MM_PASS = "000";
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -36,22 +44,22 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		//文字コードを指定
 		request.setCharacterEncoding("UTF-8");
+		//targetパラメーターを受け取る
 		String target = request.getParameter("target");
 
 		switch (target) {
 		case "login":
 			//ログイン画面にフォワード（login.jsp）
-			RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/login.jsp");
+			RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
 			dispatcherLogin.forward(request, response);
 			break;
 
 		case "register":
 			//新規登録画面にフォワード（register.jsp）
-			RequestDispatcher dispatcherRegister = request.getRequestDispatcher("/register.jsp");
+			RequestDispatcher dispatcherRegister = request.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
 			dispatcherRegister.forward(request, response);
 			break;
 		}
-
 	}
 
 	/**
@@ -59,7 +67,6 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		//文字コードを指定
 		request.setCharacterEncoding("UTF-8");
 		//targetパラメーターを受け取る
@@ -81,32 +88,49 @@ public class LoginServlet extends HttpServlet {
 	public void setLogin(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		String mail = request.getParameter("mail");//メールアドレス
 		String pass = request.getParameter("pass");//パスワード
-		String staffId = request.getParameter("staffId");//ユーザーＩＤ
 
 		//パラメータの入力値をチェック
-		if (pass != null && pass.length() != 0 && staffId != null && staffId.length() != 0) {
+		if (pass != null && pass.length() != 0 && mail != null && mail.length() != 0) {
 
-			//DAOのインスタンスを取得
-			LoginDAO ld = new LoginDAO();
-
-			//ＤＡＯにセッションスコープを渡して、ArrayListを受け取る
-			staffsDTO sd = ld.getLoginDAO(staffId, pass);
-
-			//ログイン成功時の処理
-			if (sd != null) {
-				//セッションスコープに保存
-				HttpSession session = request.getSession();
-				session.setAttribute("sd", sd);
-
-				//mypage.jspにフォワード（/MypageServlet）
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/mypage.jsp");
+			if (mail.equals(MM) && pass.equals(MM_PASS)) {
+				//管理者ページにフォワード（/）
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/master.jsp");
 				dispatcher.forward(request, response);
-
 			} else {
-				//ログイン失敗（login.jspにフォワード）
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/fail.jsp");
-				dispatcher.forward(request, response);
+
+				//DAOのインスタンスを取得
+				LoginDAO ld = new LoginDAO();
+
+				//ＤＡＯにセッションスコープを渡して
+				StaffsDTO sd = ld.getLoginDAO(mail, pass);
+
+				//ログイン成功時の処理
+				if (sd != null) {
+
+					//マイページに表示するためのArrayListを宣言***************************
+					List<BooksDTO> rentNowList = new ArrayList<>();
+
+					//マイページに表示する情報を取得するメソッドの実行（現在借りている本の一覧）
+
+					//getForMypage();
+
+					//取得した情報をセッションスコープに保存するメソッドの実行
+
+					//セッションスコープに保存
+					HttpSession session = request.getSession();
+					session.setAttribute("sd", sd);
+
+					//mypage.jspにフォワード（/MypageServlet）
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/mypage.jsp");
+					dispatcher.forward(request, response);
+
+				} else {
+					//ログイン失敗（fail.jspにフォワード）
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fail.jsp");
+					dispatcher.forward(request, response);
+				}
 			}
 		}
 	}
@@ -116,41 +140,48 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		//jspからパラメーターを受け取る
-		String staffId = request.getParameter("staffId");//ＩＤ
+		String name = request.getParameter("name");//氏名
+		String mail = request.getParameter("mail");//メールアドレス
 		String pass = request.getParameter("pass");//パスワード
 		String pass2 = request.getParameter("pass2");//パスワード確認用
-		String name = request.getParameter("name");//氏名
 		int gender = Integer.parseInt(request.getParameter("gender"));//性別
 
 		if (pass.equals(pass2)) {
 			//パラメータの入力値をチェック
-			if (staffId != null && staffId.length() != 0 && pass != null && pass.length() != 0 && name != null
-					&& name.length() != 0) {
+			if (name != null && name.length() != 0 && pass != null && pass.length() != 0 && mail != null
+					&& mail.length() != 0) {
 
 				//DAＯのインスタンスを取得
-				LoginDAO ld = new LoginDAO();
+				LoginDAO dao = new LoginDAO();
 
 				//データ結果をbooleanで受け取る
-				boolean ok = ld.getRegisterDAO(Integer.parseInt(staffId), name, pass, gender);
+				boolean ok = dao.getRegisterDAO(name, mail, pass, gender);
 
 				//結果がtrueなら
 				if (ok) {
+
+					//ユーザーの情報を取得するメソッド
+					StaffsDTO sd = dao.getUserDAO(name, mail, pass, gender);
+
+					//セッションスコープに保存
+					HttpSession session = request.getSession();
+					session.setAttribute("sd", sd);
+
 					//successのjspにフォワード
-					RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/success.jsp");
+					RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/WEB-INF/jsp/success.jsp");
 					dispatcherLogin.forward(request, response);
 
 				} else {
 
 					//失敗画面に（fail.jspにフォワード）
-					RequestDispatcher dispatcher = request.getRequestDispatcher("/fail.jsp");
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fail.jsp");
 					dispatcher.forward(request, response);
 				}
 			}
-		}else {
+		} else {
 			//失敗画面に（fail.jspにフォワード）
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/fail.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fail.jsp");
 			dispatcher.forward(request, response);
 		}
-
 	}
 }

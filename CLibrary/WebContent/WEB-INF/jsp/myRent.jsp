@@ -1,4 +1,4 @@
-<%@page import="model.MyRentDTO"%>
+<%@page import="dto.MyRentDTO"%>
 <%@page import="java.util.*"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
