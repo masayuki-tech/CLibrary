@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 public class MypageDAO {
 
 	// 実行するSQL文を文字列として事前に設定
-	final static String SQLRENT1 = "update from books where rent_id = '1'";
+	final static String SQLRENT1 = "update set rent_sheck = 2 from books where id = '1'";
 	final static String SQLRETURNUPDATE = "update from lentLogs where return_date = '";
 
 	// 返却するメソッド
@@ -59,6 +59,7 @@ public class MypageDAO {
 
 			try (
 					Connection conn = ds.getConnection();
+//					PreparedStatement pstm = conn.prepareStatement(SQLRENT1 + returnDate + "'")
 					PreparedStatement pstm = conn.prepareStatement(SQLRENT1 + returnDate + "'")) {
 
 				// SQL文の実行
