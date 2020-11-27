@@ -2,8 +2,6 @@ package servlet;
 
 //ログイン系の補助サーブレット
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -38,15 +36,22 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		//文字コードを指定
 		request.setCharacterEncoding("UTF-8");
+		String target = request.getParameter("target");
 
+		switch (target) {
+		case "login":
+			//ログイン画面にフォワード（login.jsp）
+			RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/login.jsp");
+			dispatcherLogin.forward(request, response);
+			break;
 
-		//ログイン画面にフォワード（login.jsp）
-		RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/login.jsp");
-		dispatcherLogin.forward(request, response);
+		case "register":
+			//新規登録画面にフォワード（register.jsp）
+			RequestDispatcher dispatcherRegister = request.getRequestDispatcher("/register.jsp");
+			dispatcherRegister.forward(request, response);
+			break;
+		}
 
-		//新規登録画面にフォワード（register.jsp）
-		RequestDispatcher dispatcherRegister = request.getRequestDispatcher("/register.jsp");
-		dispatcherRegister.forward(request, response);
 	}
 
 	/**
@@ -63,11 +68,11 @@ public class LoginServlet extends HttpServlet {
 		//切り替え********************************
 		switch (target) {
 		case "login":
-			setLogin(request, response);
+			setLogin(request, response);//ログイン画面のメソッドへ
 			break;
 
 		case "register":
-			setRegister(request, response);
+			setRegister(request, response);//新規登録のメソッドへ
 			break;
 		}
 	}
@@ -85,20 +90,17 @@ public class LoginServlet extends HttpServlet {
 			//DAOのインスタンスを取得
 			LoginDAO ld = new LoginDAO();
 
-			//作成したDTOを格納するArrayListを生成
-			List<staffsDTO> loginList = new ArrayList<>();
-
 			//ＤＡＯにセッションスコープを渡して、ArrayListを受け取る
-			loginList = ld.getLoginDAO(staffId, pass);
+			staffsDTO sd = ld.getLoginDAO(staffId, pass);
 
 			//ログイン成功時の処理
-			if (loginList != null) {
+			if (sd != null) {
 				//セッションスコープに保存
 				HttpSession session = request.getSession();
-				session.setAttribute("loginList", loginList);
+				session.setAttribute("sd", sd);
 
-				//mypageにフォワード（●●●.jsp）
-				RequestDispatcher dispatcher = request.getRequestDispatcher("////////////.jsp");
+				//mypage.jspにフォワード（/MypageServlet）
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/mypage.jsp");
 				dispatcher.forward(request, response);
 
 			} else {
@@ -116,31 +118,38 @@ public class LoginServlet extends HttpServlet {
 		//jspからパラメーターを受け取る
 		String staffId = request.getParameter("staffId");//ＩＤ
 		String pass = request.getParameter("pass");//パスワード
+		String pass2 = request.getParameter("pass2");//パスワード確認用
 		String name = request.getParameter("name");//氏名
 		int gender = Integer.parseInt(request.getParameter("gender"));//性別
 
-		//パラメータの入力値をチェック
-		if (staffId != null && staffId.length() != 0 && pass != null && pass.length() != 0 && name != null
-				&& name.length() != 0) {
+		if (pass.equals(pass2)) {
+			//パラメータの入力値をチェック
+			if (staffId != null && staffId.length() != 0 && pass != null && pass.length() != 0 && name != null
+					&& name.length() != 0) {
 
-			//DAＯのインスタンスを取得
-			LoginDAO ld = new LoginDAO();
+				//DAＯのインスタンスを取得
+				LoginDAO ld = new LoginDAO();
 
-			//データ結果をbooleanで受け取る
-			boolean ok = ld.getRegisterDAO(Integer.parseInt(staffId), name, pass, gender);
+				//データ結果をbooleanで受け取る
+				boolean ok = ld.getRegisterDAO(Integer.parseInt(staffId), name, pass, gender);
 
-			//結果がtrueなら
-			if (ok) {
-				//successのjspにフォワード
-				RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/success.jsp");
-				dispatcherLogin.forward(request, response);
+				//結果がtrueなら
+				if (ok) {
+					//successのjspにフォワード
+					RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/success.jsp");
+					dispatcherLogin.forward(request, response);
 
-			} else {
+				} else {
 
-				//失敗画面に（fail.jspにフォワード）
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/fail.jsp");
-				dispatcher.forward(request, response);
+					//失敗画面に（fail.jspにフォワード）
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/fail.jsp");
+					dispatcher.forward(request, response);
+				}
 			}
+		}else {
+			//失敗画面に（fail.jspにフォワード）
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/fail.jsp");
+			dispatcher.forward(request, response);
 		}
 
 	}
