@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,12 +16,12 @@
 				</div>
 				<div class="header_bottom_main">
 					<div class="header_bottom_right_list">
-						<form name="result" method="get" action="/CLibrary/WelcomeServlet?target=register">
-						<a class="right_list_new_user" href="javascript:result.submit()">新規登録</a>
-						</form>
-						<form name="result" method="get" action="/CLibrary/WelcomeServlet?target=login">
-						<a class="right_list_crrent_user" href="javascript:result.submit()">ログイン</a>
-						</form>
+
+
+						<a class="right_list_new_user" href="/CLibrary/LoginServlet?target=register">新規登録</a>
+						<br>
+						<a class="right_list_crrent_user" href="/CLibrary/LoginServlet?target=login">ログイン</a>
+
 					</div>
 				</div>
 			</div>
