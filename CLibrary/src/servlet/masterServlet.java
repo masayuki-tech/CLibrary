@@ -86,7 +86,7 @@ public class masterServlet extends HttpServlet {
 					session.removeAttribute("error");
 
 					// 抽出されたデータを利用してJavaBeansを生成
-					booksDTO booksDTO = new booksDTO(Integer.parseInt(book_id), jan,book_name, pur_date);
+					booksDTO booksDTO = new booksDTO(Integer.parseInt(book_id),jan,book_name, pur_date);
 
 					// 生成したJavaBeansをセッションスコープに保存(JSPファイルで共有するため)
 					session.setAttribute("books", booksDTO);

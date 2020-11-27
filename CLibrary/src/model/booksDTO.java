@@ -16,16 +16,12 @@ public class booksDTO implements Serializable{
 		this.book_name=book_name;
 		this.pur_date=pur_date;
 		this.rent_check=rent_check;
-		
-	}
-	public int getBook_Id() {
-		return book_id;
-	}	
 
+	}
 	public int getBook_Id() {
 		return book_id;
 	}
-	
+
 	public String getJan(){
 		return jan;
 	}
