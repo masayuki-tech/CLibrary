@@ -1,0 +1,114 @@
+.header {
+	height: 100px;
+	background-color: fff;
+	margin-bottom: 3px;
+}
+
+.header__contents {
+	max-width: 1040px;
+	width: 100%;
+	height: 105px;
+	margin: auto;
+	padding-top: 15px;
+}
+
+.header__up__main {
+	display: frex;
+	heigth: 50px;
+}
+
+.header__up__main__icon {
+	margin-right: 50pz;
+	padding-bottom: 10px;
+}
+
+.header__up__main__searchbox {
+	display: flex;
+	line-height: 50px;
+	width: 840px;
+	position: relative;
+}
+
+.input[type="text"] {
+	width: 800px;
+	height: 40px;
+	padding-left: 10px;
+	font-size: 18px;
+}
+
+label {
+	display: block;
+	width: 40px;
+	padding-left: 8px;
+	position: absolute;
+	top: 7px;
+	right: 0px;
+}
+
+:hover {
+	opacity: 1.0;
+}
+
+.submit__btn {
+	background-color: #3CCACE;
+	color: white;
+	height: 39px;
+	cursor: pointer;
+	input
+	{
+	display
+	:
+	none;
+}
+
+.search-small {
+	font-size: 1.5em;
+}
+
+.header__under__main {
+	display: flex;
+	height: 40px;
+}
+
+.header__under__main__left__list {
+	display: flex;
+}
+
+.header__under__main__category {
+	padding-right: 30px;
+	line-height: 40px; a { text-decoration : none;
+	color: black;
+	font-size: 13px;
+}
+
+.header__under__main__brand {
+	line-height: 40px; a { text-decoration : none;
+	color: black;
+	font-size: 13px;
+}
+
+.header__under__main__brand__right__list {
+	margin-left: auto;
+	display: flex;
+	margin-top: 15px;
+	margin-right: 50px;
+}
+
+.header__under__main__brand__right__list__logout__user {
+	margin-left: 20px;
+	font-size: 13px;
+}
+
+.header__under__main__brand__right__list__crrent__user {
+	padding-left: 30px;
+	font-size: 13px;
+	text-decoration: none;
+	color: black;
+}
+
+.header__under__main__brand__right__list__crrent__user__new__user {
+	padding-left: 30px;
+	font-size: 13px;
+	text-decoration: none;
+	color: black;
+}
