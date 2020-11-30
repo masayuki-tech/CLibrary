@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import dto.BooksDTO;
+import dto.ForListDTO;
 import dto.StaffsDTO;
 import model.LoginDAO;
 
@@ -23,10 +23,10 @@ import model.LoginDAO;
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
-	//管理者の情報
+	//管理者の情報************************************************
 	final String MM = "aaa@aaa";
 	final String MM_PASS = "000";
-
+	//************************************************************
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -42,24 +42,27 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//文字コードを指定
-		request.setCharacterEncoding("UTF-8");
-		//targetパラメーターを受け取る
-		String target = request.getParameter("target");
 
+		request.setCharacterEncoding("UTF-8");  //文字コードを指定
+		String target = request.getParameter("target"); //targetパラメーターを受け取る
+		String forwardPath = ""; //フォワード先のパス指定
+
+		//切り替え*********************************************
 		switch (target) {
 		case "login":
-			//ログイン画面にフォワード（login.jsp）
-			RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
-			dispatcherLogin.forward(request, response);
+			//フォワード先をログイン画面に指定（login.jsp）
+			forwardPath = "/WEB-INF/jsp/login.jsp";
 			break;
 
 		case "register":
-			//新規登録画面にフォワード（register.jsp）
-			RequestDispatcher dispatcherRegister = request.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
-			dispatcherRegister.forward(request, response);
+			//フォワード先を新規登録画面に指定（register.jsp）
+			forwardPath = "/WEB-INF/jsp/register.jsp";
 			break;
 		}
+		//****************************************************
+
+		//フォワードを実行するメソッド
+		doForward(request, response, forwardPath);
 	}
 
 	/**
@@ -67,27 +70,31 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//文字コードを指定
-		request.setCharacterEncoding("UTF-8");
-		//targetパラメーターを受け取る
-		String target = request.getParameter("target");
 
-		//切り替え********************************
+		request.setCharacterEncoding("UTF-8");  //文字コードを指定
+		String target = request.getParameter("target"); //targetパラメーターを受け取る
+
+		//切り替え*********************************************
 		switch (target) {
-		case "login":
+		case "login": //ログイン
 			setLogin(request, response);//ログイン画面のメソッドへ
 			break;
 
-		case "register":
+		case "register": //新規登録
 			setRegister(request, response);//新規登録のメソッドへ
 			break;
 		}
+		//****************************************************
 	}
 
-	//ログイン用メソッド***********************************************************
+
+//************************************************************************************************
+	//ログイン用のメインメソッド
+	//************************************************************************************************
 	public void setLogin(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		String forwardPath = ""; //フォワード先の指定
 		String mail = request.getParameter("mail");//メールアドレス
 		String pass = request.getParameter("pass");//パスワード
 
@@ -95,50 +102,48 @@ public class LoginServlet extends HttpServlet {
 		if (pass != null && pass.length() != 0 && mail != null && mail.length() != 0) {
 
 			if (mail.equals(MM) && pass.equals(MM_PASS)) {
-				//管理者ページにフォワード（/）
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/master.jsp");
-				dispatcher.forward(request, response);
+				//フォワード先を管理者ページに指定
+				forwardPath = "/WEB-INF/jsp/master.jsp";
+				//従業員のログイン認証を行う*******************************************
 			} else {
-
 				//DAOのインスタンスを取得
 				LoginDAO ld = new LoginDAO();
 
-				//ＤＡＯにセッションスコープを渡して
+				//ログイン用DAOメソッドを実行し、StaffsDTOインスタンスを取得
 				StaffsDTO sd = ld.getLoginDAO(mail, pass);
 
-				//ログイン成功時の処理
+				//sdがnullじゃなければログイン成功************************************************
 				if (sd != null) {
-
-					//マイページに表示するためのArrayListを宣言***************************
-					List<BooksDTO> rentNowList = new ArrayList<>();
-
-					//マイページに表示する情報を取得するメソッドの実行（現在借りている本の一覧）
-
-					//getForMypage();
-
-					//取得した情報をセッションスコープに保存するメソッドの実行
-
-					//セッションスコープに保存
+					//ログインユーザーのStaffsDTOインスタンスをセッションスコープに保存
 					HttpSession session = request.getSession();
 					session.setAttribute("sd", sd);
 
-					//mypage.jspにフォワード（/MypageServlet）
-					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/mypage.jsp");
-					dispatcher.forward(request, response);
+					//マイページに表示する「現在借りている本の一覧」を取得するメソッドの実行
+					setRentNowList(request,response,mail,pass);
 
+					//Myページにフォワード先を指定
+					forwardPath = "/WEB-INF/jsp/mypage.jsp";
+
+					//ログイン認証に失敗した時**********************************************
 				} else {
-					//ログイン失敗（fail.jspにフォワード）
-					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fail.jsp");
-					dispatcher.forward(request, response);
+					//ログインに失敗しましたにフォワード先を指定
+					forwardPath = "/WEB-INF/jsp/loginfaile.jsp";
 				}
 			}
+		} else {
+			//ログインに失敗しましたにフォワード先を指定
+			forwardPath = "/WEB-INF/jsp/loginfaile.jsp";
 		}
+		//フォワードを実行するメソッド
+		doForward(request, response, forwardPath);
 	}
-
-	//新規登録用メソッド******************************************************************************
+	//************************************************************************************************
+	//新規登録用メソッド
+	//************************************************************************************************
 	public void setRegister(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		String forwardPath = ""; //フォワード先の指定
 		//jspからパラメーターを受け取る
 		String name = request.getParameter("name");//氏名
 		String mail = request.getParameter("mail");//メールアドレス
@@ -155,33 +160,56 @@ public class LoginServlet extends HttpServlet {
 				LoginDAO dao = new LoginDAO();
 
 				//データ結果をbooleanで受け取る
-				boolean ok = dao.getRegisterDAO(name, mail, pass, gender);
+				boolean isRegister = dao.getRegisterDAO(name, mail, pass, gender);
 
 				//結果がtrueなら
-				if (ok) {
-
+				if (isRegister) {
 					//ユーザーの情報を取得するメソッド
 					StaffsDTO sd = dao.getUserDAO(name, mail, pass, gender);
+
+					//マイページに表示する「現在借りている本の一覧」を取得するメソッドの実行
+					setRentNowList(request,response,mail,pass);
 
 					//セッションスコープに保存
 					HttpSession session = request.getSession();
 					session.setAttribute("sd", sd);
 
-					//successのjspにフォワード
-					RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/WEB-INF/jsp/success.jsp");
-					dispatcherLogin.forward(request, response);
+					//新規登録成功のjspにフォワード
+					forwardPath = "/WEB-INF/jsp/success.jsp";
 
 				} else {
-
-					//失敗画面に（fail.jspにフォワード）
-					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fail.jsp");
-					dispatcher.forward(request, response);
+					//登録失敗画面にフォワード
+					forwardPath = "/WEB-INF/jsp/registerfaile.jsp";
 				}
 			}
 		} else {
-			//失敗画面に（fail.jspにフォワード）
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fail.jsp");
-			dispatcher.forward(request, response);
+			//登録失敗画面にフォワード
+			forwardPath = "/WEB-INF/jsp/registerfaile.jsp";
 		}
+		//フォワードを実行するメソッド
+		doForward(request, response, forwardPath);
 	}
+
+	//****************************************************************************************
+	//フォワード実行のメソッド
+	//****************************************************************************************
+	public void doForward(HttpServletRequest request, HttpServletResponse response, String forwardPath)
+			throws ServletException, IOException {
+		RequestDispatcher dispatcherLogin = request.getRequestDispatcher(forwardPath);
+		dispatcherLogin.forward(request, response);
+	}
+	//****************************************************************************************
+		//現在借りている本のリストを取得する
+		//****************************************************************************************
+		public void setRentNowList(HttpServletRequest request, HttpServletResponse response,String mail,String pass)throws ServletException, IOException {
+			//マイページに表示するためのArrayListを宣言
+			List<ForListDTO> rentNowList = new ArrayList<>();
+			//daoインスタンスを取得
+			LoginDAO dao=new LoginDAO();
+			//現在借りている本リストを取得するdaoのメソッドを実行
+			rentNowList=dao.getRentNowListDAO(mail,pass);
+			//ログインユーザーのStaffsDTOインスタンスをセッションスコープに保存
+			HttpSession session = request.getSession();
+			session.setAttribute("rentNowList", rentNowList);
+		}
 }
