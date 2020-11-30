@@ -34,8 +34,6 @@ public class MypageServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
 
 		// DB接続情報の設定
 		final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
@@ -63,8 +61,6 @@ public class MypageServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//doGet(request, response);
 
 		String forword = "";
 		int result = 3;
@@ -94,17 +90,76 @@ public class MypageServlet extends HttpServlet {
 				forword = "/WEB-INF/jsp/test2.jsp";
 			}
 			break;
+
+		case "returnKuramoto"://返却ボタンが押された時の処理
+			//メソッドを実行して、フォワードまで行う
+			forword=doReturn(request, response);
+			break;
+
+		case"rentKuramoto"://貸出ボタンが押された時の処理
+			//メソッドを実行して、フォワードまで行う
+			forword=doRent(request, response);
+			break;
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forword);
 		dispatcher.forward(request, response);
 	}
 
-	//	private void returnBook(HttpServletRequest request, HttpServletResponse response) {
-	//
-	//	}
-	//
-	//	private void rentBook(HttpServletRequest request, HttpServletResponse response) {
-	//
-	//	}
+
+
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	//返却ボタンが押された時のメソッド
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	public String doReturn(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		//フォワード先
+		String forword;
+		//返却ボタンのbook_idを取得
+		int delBookId = Integer.parseInt(request.getParameter("returnBookId"));
+		int delRentId = Integer.parseInt(request.getParameter("returnRentId"));
+		//ＤＡＯのインスタンスを生成
+		MypageDAO dao = new MypageDAO();
+		//ＤＡＯのメソッドを実行してbooleanで受け取る
+		boolean isReturn = dao.setReturn(delBookId, delRentId);
+		//セッションを削除
+
+		//booleanで処理を分岐する
+		if (isReturn) {
+			//成功したら返却完了のメッセージ
+			forword = "/WEB-INF/jsp/returnSuccess.jsp";
+		} else {
+			//処理失敗の時
+			forword = "/WEB-INF/jsp/fail.jsp";
+		}
+		return forword;
+	}
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	//貸出手続きをするメソッド
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	public String doRent(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		//フォワード先
+				String forword;
+
+				//返却ボタンのbook_idを取得
+				int rentBookId = Integer.parseInt(request.getParameter("rentBookId"));
+				int rentStaffId = 1;
+						//Integer.parseInt(request.getParameter("rentStaffId"));
+				//ＤＡＯのインスタンスを生成
+				MypageDAO dao = new MypageDAO();
+				//ＤＡＯのメソッドを実行してbooleanで受け取る
+				boolean isRent = dao.getCanRent(rentBookId, rentStaffId);
+
+				//booleanで処理を分岐する
+				if (isRent) {
+					//成功したら貸出完了のメッセージ
+					forword = "/WEB-INF/jsp/rentSuccess.jsp";
+				} else {
+					//処理失敗の時
+					forword = "/WEB-INF/jsp/fail.jsp";
+				}
+				return forword;
+
+	}
 
 }
