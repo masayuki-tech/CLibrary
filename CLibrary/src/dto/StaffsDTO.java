@@ -19,7 +19,7 @@ public StaffsDTO(int staff_id,String mail,String pass, String name,int gender) {
 }
 public int getStaff_Id() {
 	return staff_id;
-}	
+}
 public String getMail() {
 	return mail;
 }
