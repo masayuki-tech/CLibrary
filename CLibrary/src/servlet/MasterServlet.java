@@ -22,7 +22,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import dto.BookData;
 import dto.BooksDTO;
 import dto.EnvSet;
 import dto.RentlogsDTO;
@@ -58,7 +57,8 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		//RequestDispatcher dispatcher=("master.jsp");
 		//dispatcher.forward(request,response)
-
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/master.jsp");
+		rd.forward(request, response);
 
 		String action =request.getParameter("action");
 		if(action.equals("done")) {
@@ -86,25 +86,28 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 		HttpSession session = request.getSession();
 
 		// フォームからのデータを抽出
-		request.setCharacterEncoding("utf-8"); // URLエンコーディングの文字コードを設定
+		request.setCharacterEncoding("UTF-8"); // URLエンコーディングの文字コードを設定
 		String book_id = request.getParameter("book_id");
 		String jan = request.getParameter("isbn");
-		String book_name = request.getParameter("book_name");
 		String pur_date = request.getParameter("pur_date");
         int rent_check=0;
-        
-        
+
+
       //JSPページを呼び出すためのRequestDispatcher
       		RequestDispatcher rd = null;
-        
-        
+
+
       //gooleへ接続するため
       		URL url = null;
-              HttpURLConnection con = null;
+            HttpURLConnection con = null;
 
               //検索結果データ格納用
-              List<BookData> list;
-        
+              List<BooksDTO> list;
+
+            //FORMで押したボタン名の判別
+      		String button = request.getParameter("button_name");
+
+
       //接続URL
 		String requestUrl = null;
 
@@ -114,7 +117,7 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 					// エラーメッセージをセッションスコープに保存
 					session.setAttribute("error", "入力されていません。再度入力してください");
 					// 入力用フォームに再度リダイレクト
-					response.sendRedirect("/WEB-INF/jsp/master.jsp");
+					response.sendRedirect("/master.jsp");
 
 				// book_id列にデータがある場合
 				} else {
@@ -123,16 +126,16 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 
 
 					requestUrl = GOOGLE_BOOKS_API_ISBN + jan;
-					
-					
-					
-					
+				}
+
+
+
 					//Google Books APIへの接続
 					try{
 						//URLConnectionの作成
 						url = new URL(requestUrl);
 						con = (HttpURLConnection)url.openConnection();
-						con.setRequestMethod("GET");// GETリクエスト
+						con.setRequestMethod("GET");//GETリクエスト
 						con.setReadTimeout(10000);	// 10秒
 						con.setConnectTimeout(10000);// 10秒
 					} catch (Exception e) {
@@ -208,7 +211,7 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 			        	JSONArray jsonArray = jsonObject.getJSONArray("items");
 
 			        	//検索結果データの格納
-			        	list = new ArrayList<BookData>();
+			        	list = new ArrayList<BooksDTO>();
 
 			        	//実際に得られるデータ数
 			        	count = jsonArray.length();
@@ -222,25 +225,25 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 			        		JSONObject volumeInfo = item.getJSONObject("volumeInfo");
 
 			        		//titleの取得
-			        		String booktitle = volumeInfo.getString("title");
+			        		String book_name = volumeInfo.getString("title");
 
 			        		//authorsの取得
 			        		JSONArray authors = null;
-			        		String firstAuthor = null;
+			        		String author = null;
 			        		try{
 			        			authors = volumeInfo.getJSONArray("authors");
-			        			firstAuthor = authors.getString(0);
+			        			author = authors.getString(0);
 			        		}catch(JSONException e){
-			        			firstAuthor = "未登録";
+			        			author = "未登録";
 			        		}
 
 			        		//publishedDateの取得
-			        		String publishedDate = null;
+			        		String image = null;
 			        		try{
-				        		publishedDate = volumeInfo.getString("publishedDate");
+				        		image = volumeInfo.getString("imageLinks");
 
 			        		}catch(JSONException e){
-			        			publishedDate = "未登録";
+			        			image = "未登録";
 			        		}
 
 			        		//publisherの取得
@@ -262,12 +265,13 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 			        		}
 
 			        		//検索結果データの追加
-			        		list.add(new BookData(booktitle, firstAuthor, publishedDate, publisher, description));
+			        		list.add(new BooksDTO(Integer.parseInt(book_id),jan, book_name,pur_date,rent_check,image,
+			        			publisher,author,"a"));
 			        	}
 
 
 			        	//disp.jspへ渡すデータを格納
-			        	request.setAttribute("result", list);
+			        	session.setAttribute("result", list);
 
 			        }catch(Exception e){
 			        	//例外発生時、error.jspへフォワードする
@@ -278,40 +282,40 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 			        }
 
 			        //isbn_result.jspへフォワードする
-			        rd = request.getRequestDispatcher("/result.jsp");
+			        rd = request.getRequestDispatcher("/Confirm.jsp");
 			        rd.forward(request, response);
 				}
-				
-	
+
+
 
 
 					// 抽出されたデータを利用してJavaBeansを生成
-					BooksDTO BooksDTO = new BooksDTO(Integer.parseInt(book_id),jan,book_name, pur_date,rent_check);
+					//BooksDTO BooksDTO = new BooksDTO(Integer.parseInt(book_id),jan,book_name,pur_date,rent_check);
 
 					// 生成したJavaBeansをセッションスコープに保存(JSPファイルで共有するため)
-					session.setAttribute("books", BooksDTO);
+					//session.setAttribute("books", BooksDTO);
 
 					// データベース処理を行うDAOを生成
-					MasterDAO MasterDAO = new MasterDAO();
+					//MasterDAO MasterDAO = new MasterDAO();
 
-					String forwardPath = "";
+					//String forwardPath = "";
 
 					// DAO内に定義されているデータ登録用のメソッドを実行し、その結果を保存
-					boolean isInsert = MasterDAO.insert(BooksDTO);
+					//boolean isInsert = MasterDAO.insert(BooksDTO);
 
 					// メソッドの実行結果によって、切り替えるJSPファイル名を決定
-					if (isInsert) {
-						forwardPath = "/WEB-INF/jsp/addsuccess.jsp";
-					} else {
-						forwardPath ="/WEB-INF/jsp/addfailure.jsp";
-					}
+					//if (isInsert) {
+						//forwardPath = "/WEB-INF/jsp/addsuccess.jsp";
+					//} else {
+					//	forwardPath ="/WEB-INF/jsp/addfailure.jsp";
+					//}
 
 					// JSPファイルに処理を切り替え
-					RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
-					dispatcher.forward(request, response);
+					//RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
+					//dispatcher.forward(request, response);
 				}
-			}
-	
+
+
 
 
 
