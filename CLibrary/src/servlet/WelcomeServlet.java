@@ -95,7 +95,7 @@ public class WelcomeServlet extends HttpServlet {
 			// フォワード先を指定
 			List<BooksDTO> booksAllList =BooksDAO.showBooks();
 			session.setAttribute("booksAllList", booksAllList);
-			forword = "/show.jsp";
+			forword = "/WEB-INF/jsp/show.jsp";
 			break;
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forword);
