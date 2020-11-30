@@ -12,7 +12,6 @@ import java.util.List;
 import dto.ForListDTO;
 import dto.StaffsDTO;
 
-
 public class LoginDAO {
 
 	//ＤＢ接続情報の設定
@@ -24,17 +23,19 @@ public class LoginDAO {
 	final String USER = "CLibary";
 	final String PASS = "CLibrary01";
 
-//	final String URL = "jdbc:mysql://localhost:3306/mykura?serverTimezone=JST";
-//	final String USER = "mychi";
-//	final String PASS = "dgnkiglow60";
+	//	final String URL = "jdbc:mysql://localhost:3306/mykura?serverTimezone=JST";
+	//	final String USER = "mychi";
+	//	final String PASS = "dgnkiglow60";
 
 	//ＳＱＬ文
-	final String SQL="select * from rentlogs join books on rentlogs.book_id=books.book_id join staffs on rentlogs.staff_id=staffs.staff_id";
+	final String SQL = "select * from rentlogs join books on rentlogs.book_id=books.book_id join staffs on rentlogs.staff_id=staffs.staff_id";
 
 	final String LOGIN_SQL = "select staff_id,mail,pass,name,gender from staffs where mail=? && pass=?";//ログイン用
 	final String REGISTER_SQL = "insert into staffs(mail,pass,name,gender) values(?,?,?,?)";//新規登録用
 	final String PROFILE_SQL = "select staff_id,mail,pass,name,gender from staffs where name=? && mail=? && pass=? && gender=?";
-	final String MYPAGE_WHERE="where mail=? && pass=? && rent_check=1";
+	final String MYPAGE_WHERE = " where mail=? && pass=? && rent_check=1";
+	final String CANRENT_SQL = "select * from books left join rentlogs on books.book_id=rentlogs.book_id left join staffs on rentlogs.staff_id=staffs.staff_id where rent_check=0";
+
 	//ログイン*****************************************************************
 	public StaffsDTO getLoginDAO(String mail, String pass) {
 
@@ -76,9 +77,6 @@ public class LoginDAO {
 		//DBに接続して、新規登録する
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 				PreparedStatement pstm = conn.prepareStatement(REGISTER_SQL)) {
-
-			//取り出したレコードを保存するためのDTOオブジェクトの生成
-			StaffsDTO sd = new StaffsDTO();
 
 			//？に差し込む
 			pstm.setString(1, mail);//メールアドレス
@@ -126,7 +124,7 @@ public class LoginDAO {
 				gender = rs.getInt("gender");//性別
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
-			sd = new StaffsDTO(staff_id, mail, pass, name, gender);
+				sd = new StaffsDTO(staff_id, mail, pass, name, gender);
 			}
 			return sd;
 
@@ -134,13 +132,14 @@ public class LoginDAO {
 			return null;
 		}
 	}
+
 	//*******************************************************************
 	//現在借りている本リストを取得するメソッド
 	//*******************************************************************
-	public List<ForListDTO> getRentNowListDAO(String mail, String pass){
+	public List<ForListDTO> getRentNowListDAO(String mail, String pass) {
 
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
-				PreparedStatement pstm = conn.prepareStatement(SQL+MYPAGE_WHERE)) {
+				PreparedStatement pstm = conn.prepareStatement(SQL + MYPAGE_WHERE)) {
 
 			//プレイスホルダーに差し込む
 			pstm.setString(1, mail);//メール
@@ -150,26 +149,65 @@ public class LoginDAO {
 			ResultSet rs = pstm.executeQuery();
 
 			//staffsDTOのインスタンスを生成
-			ForListDTO rld = new ForListDTO();
+			ForListDTO fld = new ForListDTO();
 
 			//ArrayListの宣言
-			List<ForListDTO>bookList=new ArrayList<>();
+			List<ForListDTO> bookList = new ArrayList<>();
+			bookList.clear();
 
 			//ResultSetのフェッチ処理
 			while (rs.next()) {
 				//各列のデータをDTOにセッターを使って保存
-				String  bookName = rs.getString("book_name"); //本の名前
-				int rentId=rs.getInt("rent_id");//貸し出し履歴ID
-				Date rentDate= rs.getDate("rentlogs.rent_date");//貸出日
+				String bookName = rs.getString("book_name"); //本の名前
+				int rentId = rs.getInt("rent_id");//貸し出し履歴ID
+				Date rentDate = rs.getDate("rentlogs.rent_date");//貸出日
 				Date returnDate = rs.getDate("rentlogs.return_date");//返却日
-				int bookId=rs.getInt("rentlogs.book_id");//書籍ID
-				int staffId=rs.getInt("rentlogs.staff_id");//社員ID
+				int bookId = rs.getInt("rentlogs.book_id");//書籍ID
+				int staffId = rs.getInt("rentlogs.staff_id");//社員ID
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
-				rld = new ForListDTO(bookName, rentId,rentDate,returnDate,bookId,staffId);
-				bookList.add(rld);
+				fld = new ForListDTO(bookName, rentId, rentDate, returnDate, bookId, staffId);
+				bookList.add(fld);
+
 			}
 			return bookList;
+
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	//借りられる本の情報を取得するメソッド
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	public List<ForListDTO> getCanRentListDAO() {
+		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
+				PreparedStatement pstm = conn.prepareStatement(CANRENT_SQL)) {
+
+			//SQL文の実行(ResultSetの取得)
+			ResultSet rs = pstm.executeQuery();
+
+			//staffsDTOのインスタンスを生成
+			ForListDTO fld = new ForListDTO();
+
+			//ArrayListの宣言
+			List<ForListDTO> bookList1 = new ArrayList<>();
+			bookList1.clear();
+
+			//ResultSetのフェッチ処理
+			while (rs.next()) {
+				//各列のデータをDTOにセッターを使って保存
+				int staffId = rs.getInt("staffs.staff_id"); //社員ＩＤ
+				int bookId = rs.getInt("books.book_id");//書籍ＩＤ
+				String jan = rs.getString("jan");//ＪＡＮ
+				String bookName = rs.getString("book_name");//本の名前
+				int rentCheck = rs.getInt("rent_check");//貸出ステータス
+
+				//取り出したレコードを保存するためのDTOオブジェクトの生成
+				fld = new ForListDTO(staffId, bookId, jan, bookName, rentCheck);
+				bookList1.add(fld);
+			}
+			return bookList1;
 
 		} catch (SQLException e) {
 			return null;
