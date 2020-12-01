@@ -11,9 +11,8 @@
 	<br>
 	<a>本の登録</a>
 	<form action="/CLibrary/MasterServlet" method="post">
-		本のID<input type="text" name="book_id"><br>
 		ISBN：<input type="text" name="isbn"><br>
-		購入日：<input type="text"name="pur_date"><br>
+		購入日：<input type="date"name="pur_date" required><br>
 			<input type="submit" value="登録" name="button_name"></form>
 		<form action="/CLibrary/MasterServlet" method="get"></form>
 		<a href="/CLibrary/masterServlet?action=done">二週間以上の遅延発生者</a>
