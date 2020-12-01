@@ -27,3 +27,8 @@ a{
 	width: 355px;
     margin-right: 15px;
 }
+
+.bookTitle{
+	background-color: rgba(204,232,255,0.85);
+}
+

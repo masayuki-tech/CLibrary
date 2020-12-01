@@ -49,18 +49,14 @@
 	<div class="container">
 		<div class="d-flex books mt-4 flex-wrap">
 			<c:forEach var="bookData" items="${ booksAllList }">
-				<div class="bookContent mb-3 text-white bg-dark overflow-sc" style="
-    padding: 0;
-    width: 355px;
-    margin-right: 15px;
-">
-					<div class="bookTitle bg-info p-2">
+				<div class="bookContent mb-3 bg-dark overflow-sc"
+					style="padding: 0; width: 355px; margin-right: 15px;">
+					<div class="bookTitle p-2">
 						<c:out value="${bookData.getBook_Name()}" />
 					</div>
 					<div class="bookImage">
-						<c:out value="${bookData.getPur_Date()}" />
-						<!-- <img alt=""
-							src="https://kimetsu.com/anime/assets/img/special/degicon/wall_sp.jpg"> -->
+						<img alt=""
+							src="<c:out value="${bookData.getImage()}" />">
 					</div>
 				</div>
 			</c:forEach>

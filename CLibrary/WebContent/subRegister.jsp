@@ -32,30 +32,28 @@
 				<input type="hidden" name="target" value="register">
 				<div class="register">
 					<div class="keyword">氏名</div>
-					<input autofocus="autofocus" type="text" name="name" required><br>
+					<input class="data"autofocus="autofocus" type="text" name="name" required><br>
 				</div>
 				<div class="register mt-4 mb-4">
 					<div class="keyword">メールアドレス</div>
-					<input placeholder="例）abc@def" type="text" name="mail" required><br>
+					<input class="data" placeholder="例）abc@def" type="text" name="mail" required><br>
 				</div>
 				<div class="register mb-4">
 					<div class="keyword">パスワード</div>
-					<input placeholder="7文字以上の半角英数字" type="password" name="pass"
+					<input class="data" placeholder="7文字以上の半角英数字" type="password" name="pass"
 						required><br>
 				</div>
 				<div class="register mb-4">
 					<div class="keyword">確認用パスワード</div>
-					<input placeholder="7文字以上の半角英数字" type="password" name="pass"
+					<input class="data" placeholder="7文字以上の半角英数字" type="password" name="pass"
 						required><br>
 				</div>
-				<div class="gender">
-					<div class="gender_data">
-						<div class="gender_text">性別</div>
-						<div class="gender_radio">
-							<input type="radio" name="gender" value="1">男性 <input
-								type="radio" name="gender" value="2">女性 <input
-								type="radio" name="gender" value="0" required>未回答
-						</div>
+				<div class="register">
+					<div class="gender_text">性別</div>
+					<div class="gender_radio">
+						<input class="gender_data" type="radio" name="gender" value="1">男性
+						<input class="gender_data" type="radio" name="gender" value="2">女性
+						<input class="gender_data" type="radio" name="gender" value="0" required>未回答
 					</div>
 				</div>
 				<br>

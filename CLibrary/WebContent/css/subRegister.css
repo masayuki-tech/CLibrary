@@ -45,8 +45,13 @@ body {
     width: 128px;
 }
 
-input {
+.data {
     width: 250px;
+    margin-left: 10px;
+}
+
+.gender_data{
+	width: 10px;
 }
 
 .button {
@@ -56,6 +61,13 @@ input {
 }
 
 .gender_text {
-    line-height: 4;
     width: 120px;
+}
+
+.gender_radio{
+	margin-left: 30px;
+}
+
+.gender_data{
+	margin-left: 10px;
 }

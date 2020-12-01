@@ -12,7 +12,7 @@ public class BooksDTO implements Serializable{
     private String publisher;
     private String author;
     private String description;
-  
+
 
 	public BooksDTO() {}
 	public BooksDTO(int book_id,String jan, String book_name,String pur_date, int rent_check,String image,
@@ -28,6 +28,12 @@ public class BooksDTO implements Serializable{
 		this.description=description;
 
 	}
+
+	public BooksDTO(String book_name, String image) {
+		this.book_name = book_name;
+		this.image = image;
+	}
+
 	public int getBook_Id() {
 		return book_id;
 	}
@@ -61,14 +67,14 @@ public class BooksDTO implements Serializable{
 	public void setPublisher(String publisher) {
 		this.publisher=publisher;
 	}
-	
+
 	public String getAuthor() {
 		return author;
 	}
 	public void setAuthor(String author) {
 		this.author=author;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
