@@ -10,7 +10,7 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
 	integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
 	crossorigin="anonymous">
-<link rel="stylesheet" href="css/mypage.css">
+<link rel="stylesheet" href="css/subMypage.css">
 <title>トップページの例</title>
 </head>
 
@@ -19,18 +19,28 @@
 		<div class="header_item">
 			<h1>CLibrary</h1>
 		</div>
+		<!--
+        <div class="header_item">
+            <button onclick="location.href='/CLibrary/MypageServlet'">借りる本を探す</button>
+        </div>
+-->
 		<div class="header_item">
-			<button onclick="location.href='/CLibrary/MypageServlet'">借りてる本一覧</button>
-		</div>
-	</div>
-	<div class="container">
-		<div class="mypage_title mb-5">
 			<h1>マイページ</h1>
-			<h2>
+		</div>
+		<div class="header_item  mt-1">
+			<div>
 				ようこそ
 				<c:out value="${sd.name }" />
 				さん
-			</h2>
+			</div>
+			<a class="right_list_crrent_user "
+				href="/CLibrary/LoginServlet?target=login">ログアウト</a>
+		</div>
+	</div>
+	<div class="container">
+		<div class="rent_button mb-4">
+			<a href="/CLibrary/MypageServlet"
+				class="btn btn-border-shadow btn-border-shadow--radius">借りる本を探す</a>
 		</div>
 		<div class="mypage_return_book mb-5">
 			<c:if test="${rentNowList !=null}">
@@ -106,3 +116,4 @@
 	</footer>
 </body>
 </html>
+
