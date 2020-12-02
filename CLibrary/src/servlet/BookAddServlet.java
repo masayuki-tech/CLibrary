@@ -59,27 +59,7 @@ public class BookAddServlet extends HttpServlet {
 			}
 break;
 
-			//		if(action.equals("done")) {
-			//
-			//
-			//			HttpSession session = request.getSession();
-			//			MasterDAO MasterDAO = new MasterDAO();
-			//
-			//		// データベース処理を行うDAOを生成
-			//		BooksDTO bookdata = new BooksDTO();
-			//		bookdata = (BooksDTO) session.getAttribute("result");
-			//
-			//
-			//		// DAO内に定義されているデータ登録用のメソッドを実行し、その結果を保存
-			//		boolean isInsert = MasterDAO.insert(bookdata);
-			//
-			//		// メソッドの実行結果によって、切り替えるJSPファイル名を決定
-			//		if (isInsert) {
-			//			forwardPath = "/WEB-INF/jsp/addsuccess.jsp";
-			//		} else {
-			//			forwardPath = "/WEB-INF/jsp/addfailure.jsp";
-			//		}
-		}
+					}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
 		dispatcher.forward(request, response);
 	}

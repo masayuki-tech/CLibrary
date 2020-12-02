@@ -8,6 +8,6 @@
 </head>
 <body>
 登録失敗
-<a href="/master.jsp">戻る</a>
+<a href="/WEB-INF/jsp/master.jsp">戻る</a>
 </body>
 </html>
