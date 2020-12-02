@@ -46,6 +46,16 @@
 			<% end %> --%>
 		</div>
 	</nav>
+	<div class="search_box">
+		<form action="/CLibrary/BookSearchServlet?target=likeSearchMain"
+			method="post" class=”form-group”>
+			<div class="form-group">
+				<input type="text" name="text" class=”form-control”
+					placeholder="キーワードを入力"> <input type="submit" value="検索"
+					class="btn btn-primary btn-lg">
+			</div>
+		</form>
+	</div>
 	<div class="container">
 		<div class="d-flex books mt-4 flex-wrap">
 			<c:forEach var="bookData" items="${ booksAllList }">
@@ -55,8 +65,7 @@
 						<c:out value="${bookData.getBook_Name()}" />
 					</div>
 					<div class="bookImage">
-						<img alt=""
-							src="<c:out value="${bookData.getImage()}" />">
+						<img alt="" src="<c:out value="${bookData.getImage()}" />">
 					</div>
 				</div>
 			</c:forEach>

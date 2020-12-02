@@ -49,7 +49,7 @@ public class MypageServlet extends HttpServlet {
 			// 接続に成功した場合、success.jspファイルにフォワード
 			//			forword = "/WEB-INF/jsp/success.jsp";
 
-			forword = "/WEB-INF/jsp/myRent.jsp";
+			forword = "/WEB-INF/jsp/booksearchMypage.jsp";
 		} catch (SQLException e) {
 			// 接続に失敗した場合、fall.jspファイルにフォワード
 			forword = "fail.jsp";

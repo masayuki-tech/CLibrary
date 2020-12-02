@@ -6,9 +6,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import dto.BooksDTO;
 import dto.ForListDTO;
 import dto.StaffsDTO;
 
@@ -40,6 +42,8 @@ public class LoginDAO {
 	final String PROFILE_SQL = "select staff_id,mail,pass,name,gender from staffs where name=? && mail=? && pass=? && gender=?";
 	final String MYPAGE_WHERE = " where mail=? && pass=? && rent_check=1 &&  return_date is null";
 	final String CANRENT_SQL = "select * from books where rent_check=0";
+	//人気の本ランキングＴＯＰ３
+		final String SQL4 = "select book_name,jan,count(*) from rentlogs join books on rentlogs.book_id=books.book_id group by jan order by count(*) desc limit 5";
 
 	//**********************************************************************************************************************************
 	//ログイン認証
@@ -253,4 +257,34 @@ public class LoginDAO {
 			return null;
 		}
 	}
+	//**********************************************************
+		//★人気の本ランキングＴＯＰ5
+		//**********************************************************
+		public List<BooksDTO> getTop5() {
+			try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
+					Statement stm = conn.createStatement()) {
+
+				//ArrayListを準備
+				List<BooksDTO> list3 = new ArrayList<>();
+				list3.clear();
+
+				//SQL文を実行してResultSetに格納
+				ResultSet rs3 = stm.executeQuery(SQL4);
+
+				//１行ずつ取り出す
+				while (rs3.next()) {
+					String bookName = rs3.getString("book_name");//本の名前
+					String jan = rs3.getString("jan");//ＪＡＮ
+					String bbb=null;
+					//BooksDTOコンストラクタに引数を渡す
+					BooksDTO bd2 = new BooksDTO(bookName, jan,bbb);
+					//ArrayListに追加していく
+					list3.add(bd2);
+				}
+				return list3;
+
+			} catch (SQLException e) {
+				return null;
+			}
+		}
 }

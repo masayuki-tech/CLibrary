@@ -77,7 +77,7 @@
 				</table>
 			</c:if>
 		</div>
-		<div class="mypage_rentAll mb-5">
+		<%-- <div class="mypage_rentAll mb-5">
 			<table border="1">
 				<tr>
 					<th colspan="3">貸出可能な本一覧</th>
@@ -105,7 +105,7 @@
 					</tr>
 				</c:forEach>
 			</table>
-		</div>
+		</div> --%>
 
 	</div>
 	<footer>

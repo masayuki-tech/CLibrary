@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dto.BooksDTO;
 import dto.ForListDTO;
 import dto.StaffsDTO;
 import model.LoginDAO;
@@ -106,7 +107,7 @@ public class LoginServlet extends HttpServlet {
 			//管理者のログインなら管理者ページにフォワード先を指定
 			if (mail.equals(MM) && pass.equals(MM_PASS)) {
 				//フォワード先を管理者ページに指定
-				forwardPath = "/WEB-INF/jsp/master.jsp";
+				forwardPath = "/WEB-INF/jsp/mastermain.jsp";
 				//従業員のログイン認証を行う*******************************************
 			} else {
 				//DAOのインスタンスを取得
@@ -130,6 +131,8 @@ public class LoginServlet extends HttpServlet {
 					//マイページに表示する「借りられる本の一覧」を取得するメソッドの実行
 					setCanRentList(request, response);
 
+					//人気の本TOP5
+					top5(request, response);
 					//Myページにフォワード先を指定
 					forwardPath = "/WEB-INF/jsp/mypage.jsp";
 
@@ -186,6 +189,9 @@ public class LoginServlet extends HttpServlet {
 
 					//マイページに表示する「借りられる本の一覧」を取得するメソッドの実行
 					setCanRentList(request, response);
+
+					//人気の本TOP5
+					top5(request, response);
 
 					//新規登録成功にフォワード
 					forwardPath = "/WEB-INF/jsp/success.jsp";
@@ -244,6 +250,8 @@ public class LoginServlet extends HttpServlet {
 		updateRentNowList(request, response);
 		//借りられる本のリストを取得
 		setCanRentList(request, response);
+		//人気の本TOP5
+		top5(request, response);
 		//フォワードを実行
 		RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/WEB-INF/jsp/mypage.jsp");
 		dispatcherLogin.forward(request, response);
@@ -291,4 +299,28 @@ public class LoginServlet extends HttpServlet {
 		session.removeAttribute("canRentList");
 		session.removeAttribute("rentNowList");
 	}
+
+	//**********************************************************
+	//★人気の本ランキングＴＯＰ5を取得するメソッド
+	//**********************************************************
+	public void top5(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.setCharacterEncoding("UTF-8");//文字コードを指定
+		HttpSession session = request.getSession();
+		//ＤＡＯのインスタンスを取得
+		LoginDAO kdao3 = new LoginDAO();
+
+		//ArrayListを作成して、クリア処理
+		List<BooksDTO> top5List = new ArrayList<>();
+		top5List.clear();
+
+		//daoのメソッドを実行
+		top5List = kdao3.getTop5();
+
+		//人気ランキングTop5の一覧をセッションスコープに保存
+		//HttpSession session = request.getSession();
+		session.setAttribute("top5List", top5List);
+	}
+
 }

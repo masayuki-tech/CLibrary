@@ -34,7 +34,6 @@
 			<td>貸出履歴ID</td>
 			<td>貸出日</td>
 			<td>返却予定日</td>
-			<td>返却日</td>
 			<td>書籍管理ID</td>
 			<td>社員管理ID</td>
 			<td>社員名</td>
@@ -44,7 +43,6 @@
 				<td>${rent3.getRentId()}</td>
 				<td>${rent3.getRentDate()}</td>
 				<td>${rent3.getSchedule()}</td>
-				<td>${rent3.getReturnDate() }</td>
 				<td>${rent3.getBookId()}</td>
 				<td>${rent3.getStaffId()}</td>
 				<td>${rent3.getName()}</td>
