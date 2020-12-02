@@ -10,7 +10,7 @@
 	integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="css/index.css">
-<title>トップページの例</title>
+<title>一覧 例</title>
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light">
@@ -21,11 +21,12 @@
 			aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
+
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item px-5 active"><a class="nav-link" href="/CLibrary/WelcomeServlet"><h4>Home</h4></a>
 				</li>
-				<li class="nav-item mt-1"><form name="show" method="post"
+				<li class="nav-item mt-1"><form mame="show" method="post"
 						action="/CLibrary/WelcomeServlet?target=select">
 						<a class="nav-link" href="javascript:show.submit()"><h5>一覧を表示する</h5></a>
 					</form></li>
@@ -45,12 +46,20 @@
 			<% end %> --%>
 		</div>
 	</nav>
-	<div class="container" id="index-container">
-		<div class="jumbotron">
-			<h1 class="display-4">CLibrary</h1>
-			<p class="lead">会社で購入した書籍を借りることができます</p>
-			<hr class="my-4">
-			<p>書籍を借りるにはログイン、新規登録を行ってください</p>
+	<div class="container">
+		<div class="d-flex books mt-4 flex-wrap">
+			<c:forEach var="bookData" items="${ booksAllList }">
+				<div class="bookContent mb-3 bg-dark overflow-sc"
+					style="padding: 0; width: 355px; margin-right: 15px;">
+					<div class="bookTitle p-2">
+						<c:out value="${bookData.getBook_Name()}" />
+					</div>
+					<div class="bookImage">
+						<img alt=""
+							src="<c:out value="${bookData.getImage()}" />">
+					</div>
+				</div>
+			</c:forEach>
 		</div>
 	</div>
 </body>

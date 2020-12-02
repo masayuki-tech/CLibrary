@@ -1,0 +1,34 @@
+.navbar {
+	background-color: rgba(204,232,255,0.90);
+}
+
+.form-inline{
+	margin-right: 40px;
+}
+
+body{
+	background-image: url(img/woodmin.jpg);
+}
+
+a{
+	color: black;
+}
+
+.container{
+	margin-top: 200px;
+}
+
+.jumbotron {
+    background-color: rgba(204,232,255,0.85);
+}
+
+.bookContent{
+	padding: 0;
+	width: 355px;
+    margin-right: 15px;
+}
+
+.bookTitle{
+	background-color: rgba(204,232,255,0.85);
+}
+
