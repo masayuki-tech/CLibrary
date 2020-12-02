@@ -16,9 +16,9 @@ public class BooksDAO {
 	final static String SQLSHOW = "select * from books";
 
 	// DB接続情報の設定
-	final static String URL = "jdbc:mysql://localhost:3306/sampledb?serverTimezone=JST";
-	final static String USER = "masayuki";
-	final static String PASS = "masayuki6";
+	final static String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
+	final static String USER = "team1";
+	final static String PASS = "CLibrary";
 
 	// 登録されている本の一覧表示をするメソッド
 	public static List<BooksDTO> showBooks() {

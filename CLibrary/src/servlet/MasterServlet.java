@@ -291,7 +291,7 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 		}
 
 		//isbn_result.jspへフォワードする
-		ra = request.getRequestDispatcher("/confirm.jsp");
+		ra = request.getRequestDispatcher("/WEB-INF/jsp/confirm.jsp");
 		ra.forward(request, response);
 	}
 
