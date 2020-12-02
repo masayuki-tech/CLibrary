@@ -8,7 +8,9 @@
 <meta charset="UTF-8">
 <title>削除確認</title>
 <style>
-div {background-color:lightgray;}
+div {
+	background-color: lightgray;
+}
 </style>
 </head>
 <body>
