@@ -10,7 +10,7 @@
 <body>
 	<h2>返却手続きが完了しました</h2>
 
-<form action="/CLibrary/LoginServlet?target=login" method="post">
+<form action="/CLibrary/LoginServlet?target=toMypage" method="post">
 <input type="hidden" name="mail" value="${sd.mail }">
 <input type="hidden" name="pass" value="${sd.pass }">
 							<input type="submit" value="Ｍｙページへ戻る">

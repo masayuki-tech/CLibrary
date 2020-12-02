@@ -38,10 +38,10 @@ public class WelcomeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// DB接続情報の設定
-		final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
-		final String USER = "CLibary";
-		final String PASS = "CLibrary01";
+		//ＤＢ接続用
+				final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
+				final String USER = "team1";
+				final String PASS = "CLibrary";
 
 		// URLエンコーディングの文字コードを設定
 		request.setCharacterEncoding("utf-8");
@@ -64,10 +64,10 @@ public class WelcomeServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// DB接続情報の設定
-		final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
-		final String USER = "CLibary";
-		final String PASS = "CLibrary01";
+		//ＤＢ接続用
+				final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
+				final String USER = "team1";
+				final String PASS = "CLibrary";
 
 		String forword = "";//フォワード先を指定
 

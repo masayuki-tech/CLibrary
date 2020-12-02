@@ -23,9 +23,14 @@ public class MypageDAO {
 	final String RENT_SQL2="update books set rent_check=1 where book_id=?";
 
 
-	final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
-	final String USER = "CLibary";
-	final String PASS = "CLibrary01";
+//	final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
+//	final String USER = "CLibary";
+//	final String PASS = "CLibrary01";
+
+	//ＤＢ接続用
+		final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
+		final String USER = "team1";
+		final String PASS = "CLibrary";
 
 
 	// 返却するメソッド

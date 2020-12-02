@@ -18,9 +18,14 @@ public class MasterDAO {
 //	final String SQL = "insert into books (jan,book_name,pur_date,rent_check,image,publisher,author,description) values(?,?,?,?,?,?,?,?)";//本の登録のSQL文
 	final String SEARCH = "select * from rentlogs";//rentlogsの返却されていない検索
 
-	final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
-	final String USER = "team1";
-	final String PASS = "CLibrary";
+//	final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
+//	final String USER = "team1";
+//	final String PASS = "CLibrary";
+
+	//ＤＢ接続用
+		final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
+		final String USER = "team1";
+		final String PASS = "CLibrary";
 
 	public boolean insert(BooksDTO bookdata) {
 

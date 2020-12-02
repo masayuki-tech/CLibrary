@@ -24,10 +24,15 @@ public class KuramotoDAO {
 	//	final String USER = "javauser";
 	//	final String PASS = "java06pass";
 
+//	//ＤＢ接続用
+//	final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
+//	final String USER = "CLibary";
+//	final String PASS = "CLibrary01";
+
 	//ＤＢ接続用
-	final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
-	final String USER = "CLibary";
-	final String PASS = "CLibrary01";
+	final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
+	final String USER = "team1";
+	final String PASS = "CLibrary";
 
 	//本の登録ＳＱＬ文
 	final String SQL1 = "insert into books (jan,book_name,pur_date,rent_check) values (?,?,?,?)";

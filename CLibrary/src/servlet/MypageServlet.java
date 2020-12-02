@@ -11,7 +11,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import dto.StaffsDTO;
 import model.MypageDAO;
 
 /**
@@ -35,10 +37,10 @@ public class MypageServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// DB接続情報の設定
-		final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
-		final String USER = "CLibary";
-		final String PASS = "CLibrary01";
+		//ＤＢ接続用
+				final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
+				final String USER = "team1";
+				final String PASS = "CLibrary";
 
 		String forword = "";
 
@@ -146,7 +148,9 @@ public class MypageServlet extends HttpServlet {
 
 		//返却ボタンのbook_idを取得
 		int rentBookId = Integer.parseInt(request.getParameter("rentBookId"));
-		int rentStaffId = 1;
+		HttpSession session = request.getSession();
+		StaffsDTO sdRent=(StaffsDTO)session.getAttribute("sd");
+		int rentStaffId = sdRent.getStaff_Id();
 		//Integer.parseInt(request.getParameter("rentStaffId"));
 		//ＤＡＯのインスタンスを生成
 		MypageDAO dao2 = new MypageDAO();

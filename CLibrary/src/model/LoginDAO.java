@@ -19,13 +19,18 @@ public class LoginDAO {
 	// 	final String USER="javauser";
 	//	final String PASS="java06pass";
 
-	final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
-	final String USER = "CLibary";
-	final String PASS = "CLibrary01";
+//	final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
+//	final String USER = "CLibary";
+//	final String PASS = "CLibrary01";
 
 	//	final String URL = "jdbc:mysql://localhost:3306/mykura?serverTimezone=JST";
 	//	final String USER = "mychi";
 	//	final String PASS = "dgnkiglow60";
+
+	//ＤＢ接続用
+		final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
+		final String USER = "team1";
+		final String PASS = "CLibrary";
 
 	//ＳＱＬ文
 	final String SQL = "select * from rentlogs join books on rentlogs.book_id=books.book_id join staffs on rentlogs.staff_id=staffs.staff_id";
@@ -33,8 +38,8 @@ public class LoginDAO {
 	final String LOGIN_SQL = "select staff_id,mail,pass,name,gender from staffs where mail=? && pass=?";//ログイン用
 	final String REGISTER_SQL = "insert into staffs(mail,pass,name,gender) values(?,?,?,?)";//新規登録用
 	final String PROFILE_SQL = "select staff_id,mail,pass,name,gender from staffs where name=? && mail=? && pass=? && gender=?";
-	final String MYPAGE_WHERE = " where mail=? && pass=? && rent_check=1";
-	final String CANRENT_SQL = "select * from books left join rentlogs on books.book_id=rentlogs.book_id left join staffs on rentlogs.staff_id=staffs.staff_id where rent_check=0";
+	final String MYPAGE_WHERE = " where mail=? && pass=? && rent_check=1 &&  return_date is null";
+	final String CANRENT_SQL = "select * from books where rent_check=0";
 
 	//**********************************************************************************************************************************
 	//ログイン認証
@@ -232,14 +237,14 @@ public class LoginDAO {
 			//ResultSetのフェッチ処理
 			while (rs4.next()) {
 				//各列のデータをDTOにセッターを使って保存
-				int staffId = rs4.getInt("staffs.staff_id"); //社員ＩＤ
+//				int staffId = rs4.getInt("staffs.staff_id"); //社員ＩＤ
 				int bookId = rs4.getInt("books.book_id");//書籍ＩＤ
 				String jan = rs4.getString("jan");//ＪＡＮ
 				String bookName = rs4.getString("book_name");//本の名前
 				int rentCheck = rs4.getInt("rent_check");//貸出ステータス
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
-				fld1 = new ForListDTO(staffId, bookId, jan, bookName, rentCheck);
+				fld1 = new ForListDTO(bookId, jan, bookName, rentCheck);
 				bookList1.add(fld1);
 			}
 			return bookList1;
