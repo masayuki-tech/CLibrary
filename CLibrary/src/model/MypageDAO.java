@@ -15,12 +15,12 @@ import javax.sql.DataSource;
 public class MypageDAO {
 
 	// 実行するSQL文を文字列として事前に設定
-	final static String SQLRENT1 = "update set rent_check = 1 from books where id = '1'";
-	final static String SQLRETURNUPDATE = "update from lentlogs where return_date = '";
-	final static String RETURN_SQL1="update rentlogs set return_date=? where rent_id=? ";
-	final static String RETURN_SQL2="update books set rent_check=0 where book_id=?";
-	final static String RENT_SQL1="insert into rentlogs (rent_date,book_id,staff_id) values(?,?,?)";
-	final static String RENT_SQL2="update books set rent_check=1 where book_id=?";
+	final  String SQLRENT1 = "update set rent_check = 1 from books where id = '1'";
+	final  String SQLRETURNUPDATE = "update from lentlogs where return_date = '";
+	final  String RETURN_SQL1="update rentlogs set return_date=? where rent_id=? ";
+	final  String RETURN_SQL2="update books set rent_check=0 where book_id=?";
+	final  String RENT_SQL1="insert into rentlogs (rent_date,book_id,staff_id) values(?,?,?)";
+	final String RENT_SQL2="update books set rent_check=1 where book_id=?";
 
 
 	final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
@@ -29,9 +29,8 @@ public class MypageDAO {
 
 
 	// 返却するメソッド
-	public static int rentBook() {
+	public  int rentBook() {
 		// DB接続処理は例外処理が必須
-
 		InitialContext ic;
 		DataSource ds = null;
 
@@ -59,7 +58,7 @@ public class MypageDAO {
 		}
 	}
 
-	public static int returnBook() {
+	public  int returnBook() {
 		InitialContext ic;
 		DataSource ds = null;
 
@@ -89,7 +88,7 @@ public class MypageDAO {
 			return 1;
 		}
 	}
-	private static LocalDate getReturnDate() {
+	private  LocalDate getReturnDate() {
 
 		LocalDate returnDate = LocalDate.now();
 		return returnDate;

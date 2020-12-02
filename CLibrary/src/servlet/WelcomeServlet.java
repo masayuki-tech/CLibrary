@@ -46,12 +46,10 @@ public class WelcomeServlet extends HttpServlet {
 		// URLエンコーディングの文字コードを設定
 		request.setCharacterEncoding("utf-8");
 
-		//フォワード先を指定
-		String forword = "";
+		String forword = ""; //フォワード先を指定
 
 		// DB接続処理は例外処理が必須
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS)) {
-
 			forword = "index.jsp";//フォワード先をトップ画面に指定
 
 		} catch (SQLException e) {
@@ -60,7 +58,6 @@ public class WelcomeServlet extends HttpServlet {
 		//フォワードを実行するメソッド
 		doForword(request, response, forword);
 	}
-
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -82,11 +79,11 @@ public class WelcomeServlet extends HttpServlet {
 
 		// アクセス元のページによって処理を分岐
 		switch (target) {
-		case "register": // target=registerの場合
+		case "register": //新規登録画面にフォワード
 			forword = "/CLibrary/LoginServlet";// フォワード先を指定
 			break;
 
-		case "login": // target=loginの場合
+		case "login": // ログイン画面にフォワード
 			forword = "/CLibrary/LoginServlet";// フォワード先を指定
 			break;
 

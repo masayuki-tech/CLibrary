@@ -36,7 +36,42 @@ public class LoginDAO {
 	final String MYPAGE_WHERE = " where mail=? && pass=? && rent_check=1";
 	final String CANRENT_SQL = "select * from books left join rentlogs on books.book_id=rentlogs.book_id left join staffs on rentlogs.staff_id=staffs.staff_id where rent_check=0";
 
-	//ログイン*****************************************************************
+	//**********************************************************************************************************************************
+	//ログイン認証
+	//**********************************************************************************************************************************
+	public boolean connectLogin(String mail, String pass) {
+		//DBに接続して、ログイン可能かどうかのチェック
+		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
+				PreparedStatement pstm = conn.prepareStatement(LOGIN_SQL)) {
+
+			//？に差し込む
+			pstm.setString(1, mail);//メール
+			pstm.setString(2, pass);//パスワード
+
+			//SQL文の実行(ResultSetの取得)
+			ResultSet rs1 = pstm.executeQuery();
+
+			//ResultSetのフェッチ処理
+			if (rs1.next()) {
+				//各列のデータをDTOにセッターを使って保存
+				String mail1 = rs1.getString("mail");//メールアドレス
+				String pass1 = rs1.getString("pass");//パスワード
+				if (mail.equals(mail1) && pass.equals(pass1)) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			return false;
+		}
+	}
+
+	//**********************************************************
+	//ログインしたユーザーの情報を取得する
+	//**********************************************************
 	public StaffsDTO getLoginDAO(String mail, String pass) {
 
 		//DBに接続して、ログイン可能かどうかのチェック
@@ -44,35 +79,37 @@ public class LoginDAO {
 				PreparedStatement pstm = conn.prepareStatement(LOGIN_SQL)) {
 
 			//staffsDTOのインスタンスを作成
-			StaffsDTO sd = new StaffsDTO();
+			StaffsDTO sd2 = new StaffsDTO();
 
 			//？に差し込む
 			pstm.setString(1, mail);//メール
 			pstm.setString(2, pass);//パスワード
 
 			//SQL文の実行(ResultSetの取得)
-			ResultSet rs = pstm.executeQuery();
-
-			//ResultSetのフェッチ処理（取り出すデータがある間、繰り返す)
-			while (rs.next()) {
+			ResultSet rs1 = pstm.executeQuery();
+			if (rs1.next()) {
 				//各列のデータをDTOにセッターを使って保存
-				int staff_id = rs.getInt("staff_id"); //ＩＤ
-				mail = rs.getString("mail");//メールアドレス
-				pass = rs.getString("pass");//パスワード
-				String name = rs.getString("name");//名前
-				int gender = rs.getInt("gender");//性別
+				int staff_id = rs1.getInt("staff_id"); //ＩＤ
+				String mail1 = rs1.getString("mail");//メールアドレス
+				String pass1 = rs1.getString("pass");//パスワード
+				String name = rs1.getString("name");//名前
+				int gender = rs1.getInt("gender");//性別
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
-				sd = new StaffsDTO(staff_id, mail, pass, name, gender);
-			}
-			return sd;
+				sd2 = new StaffsDTO(staff_id, mail1, pass1, name, gender);
+				return sd2;
 
+			} else {
+				return null;
+			}
 		} catch (SQLException e) {
 			return null;
 		}
 	}
 
-	//新規登録******************************************************************
+	//********************************************************************************
+	//新規登録処理
+	//********************************************************************************
 	public boolean getRegisterDAO(String name, String mail, String pass, int gender) {
 		//DBに接続して、新規登録する
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
@@ -84,7 +121,7 @@ public class LoginDAO {
 			pstm.setString(3, name);//名前
 			pstm.setInt(4, gender);//性別
 
-			//SQL文の実行(ResultSetの取得)
+			//SQL文の実行
 			if (pstm.executeUpdate() != 1) {
 				return false;
 			} else {
@@ -96,7 +133,9 @@ public class LoginDAO {
 		}
 	}
 
-	//新規登録したアカウントの情報を取得****************************************************
+	//**********************************************************
+	//新規登録したアカウントの情報を取得
+	//**********************************************************
 	public StaffsDTO getUserDAO(String name, String mail, String pass, int gender) {
 
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
@@ -109,19 +148,19 @@ public class LoginDAO {
 			pstm.setInt(4, gender);//性別
 
 			//SQL文の実行(ResultSetの取得)
-			ResultSet rs = pstm.executeQuery();
+			ResultSet rs2 = pstm.executeQuery();
 
 			//staffsDTOのインスタンスを生成
 			StaffsDTO sd = new StaffsDTO();
 
 			//ResultSetのフェッチ処理
-			while (rs.next()) {
+			while (rs2.next()) {
 				//各列のデータをDTOにセッターを使って保存
-				int staff_id = rs.getInt("staff_id"); //ＩＤ
-				mail = rs.getString("mail");//メールアドレス
-				pass = rs.getString("pass");//パスワード
-				name = rs.getString("name");//名前
-				gender = rs.getInt("gender");//性別
+				int staff_id = rs2.getInt("staff_id"); //ＩＤ
+				mail = rs2.getString("mail");//メールアドレス
+				pass = rs2.getString("pass");//パスワード
+				name = rs2.getString("name");//名前
+				gender = rs2.getInt("gender");//性別
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
 				sd = new StaffsDTO(staff_id, mail, pass, name, gender);
@@ -133,9 +172,9 @@ public class LoginDAO {
 		}
 	}
 
-	//*******************************************************************
-	//現在借りている本リストを取得するメソッド
-	//*******************************************************************
+	//*********************************************************************************************
+		//ユーザーが現在借りている本リストを取得するメソッド
+		//*********************************************************************************************
 	public List<ForListDTO> getRentNowListDAO(String mail, String pass) {
 
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
@@ -146,29 +185,25 @@ public class LoginDAO {
 			pstm.setString(2, pass);//パスワード
 
 			//SQL文の実行(ResultSetの取得)
-			ResultSet rs = pstm.executeQuery();
-
-			//staffsDTOのインスタンスを生成
-			ForListDTO fld = new ForListDTO();
+			ResultSet rs3 = pstm.executeQuery();
 
 			//ArrayListの宣言
 			List<ForListDTO> bookList = new ArrayList<>();
 			bookList.clear();
 
 			//ResultSetのフェッチ処理
-			while (rs.next()) {
+			while (rs3.next()) {
 				//各列のデータをDTOにセッターを使って保存
-				String bookName = rs.getString("book_name"); //本の名前
-				int rentId = rs.getInt("rent_id");//貸し出し履歴ID
-				Date rentDate = rs.getDate("rentlogs.rent_date");//貸出日
-				Date returnDate = rs.getDate("rentlogs.return_date");//返却日
-				int bookId = rs.getInt("rentlogs.book_id");//書籍ID
-				int staffId = rs.getInt("rentlogs.staff_id");//社員ID
+				String bookName = rs3.getString("book_name"); //本の名前
+				int rentId = rs3.getInt("rent_id");//貸し出し履歴ID
+				Date rentDate = rs3.getDate("rentlogs.rent_date");//貸出日
+				Date returnDate = rs3.getDate("rentlogs.return_date");//返却日
+				int bookId = rs3.getInt("rentlogs.book_id");//書籍ID
+				int staffId = rs3.getInt("rentlogs.staff_id");//社員ID
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
-				fld = new ForListDTO(bookName, rentId, rentDate, returnDate, bookId, staffId);
+				ForListDTO fld = new ForListDTO(bookName, rentId, rentDate, returnDate, bookId, staffId);
 				bookList.add(fld);
-
 			}
 			return bookList;
 
@@ -185,27 +220,27 @@ public class LoginDAO {
 				PreparedStatement pstm = conn.prepareStatement(CANRENT_SQL)) {
 
 			//SQL文の実行(ResultSetの取得)
-			ResultSet rs = pstm.executeQuery();
+			ResultSet rs4 = pstm.executeQuery();
 
 			//staffsDTOのインスタンスを生成
-			ForListDTO fld = new ForListDTO();
+			ForListDTO fld1 = new ForListDTO();
 
 			//ArrayListの宣言
 			List<ForListDTO> bookList1 = new ArrayList<>();
 			bookList1.clear();
 
 			//ResultSetのフェッチ処理
-			while (rs.next()) {
+			while (rs4.next()) {
 				//各列のデータをDTOにセッターを使って保存
-				int staffId = rs.getInt("staffs.staff_id"); //社員ＩＤ
-				int bookId = rs.getInt("books.book_id");//書籍ＩＤ
-				String jan = rs.getString("jan");//ＪＡＮ
-				String bookName = rs.getString("book_name");//本の名前
-				int rentCheck = rs.getInt("rent_check");//貸出ステータス
+				int staffId = rs4.getInt("staffs.staff_id"); //社員ＩＤ
+				int bookId = rs4.getInt("books.book_id");//書籍ＩＤ
+				String jan = rs4.getString("jan");//ＪＡＮ
+				String bookName = rs4.getString("book_name");//本の名前
+				int rentCheck = rs4.getInt("rent_check");//貸出ステータス
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
-				fld = new ForListDTO(staffId, bookId, jan, bookName, rentCheck);
-				bookList1.add(fld);
+				fld1 = new ForListDTO(staffId, bookId, jan, bookName, rentCheck);
+				bookList1.add(fld1);
 			}
 			return bookList1;
 
