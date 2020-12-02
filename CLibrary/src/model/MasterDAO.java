@@ -2,6 +2,7 @@ package model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,8 +15,8 @@ import dto.RentlogsDTO;
 
 public class MasterDAO {
 	// データ登録用のSQL文(プレースホルダ利用)
-	final String SQL = "select * from books";
-//	final String SQL = "insert into books (jan,book_name,pur_date,rent_check,image,publisher,author,description) values(?,?,?,?,?,?,?,?)";//本の登録のSQL文
+	//final String SQL = "select * from books";
+	final String SQL = "insert into books (jan,book_name,pur_date,rent_check,image,publisher,author,description) values(?,?,?,?,?,?,?,?)";//本の登録のSQL文
 	final String SEARCH = "select * from rentlogs";//rentlogsの返却されていない検索
 
 	final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
@@ -25,47 +26,47 @@ public class MasterDAO {
 	public boolean insert(BooksDTO bookdata) {
 
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
-				Statement pstm = conn.createStatement()) {
+				PreparedStatement pstm = conn.prepareStatement(SQL)) {
 
-//			HttpSession session = request.getSession();
-//			BooksDTO bookdata = (BooksDTO) session.getAttribute("result");
 
-			ResultSet rs=pstm.executeQuery(SQL);
 
-			if(rs.next()) {
-				return true;
-			}else {
-				return false;
-			}
+
+//			ResultSet rs=pstm.executeQuery(SQL);
+
+			//if(rs.next()) {
+			//	return true;
+			//}else {
+			//	return false;
+			//}
 
 			// JavaBeans内のデータを取り出し、プレースホルダに代入
-//			pstm.setString(1, "1");
-//			pstm.setString(2,"1");
+//		pstm.setString(1, "1");
+//		pstm.setString(2,"1");
 //		pstm.setString(3, "20201020");
 //		pstm.setInt(4,1);
 //			pstm.setString(5, "1");
 //			pstm.setString(6, "1");
 //			pstm.setString(7, "1");
-//		pstm.setString(8, "1");
+//	pstm.setString(8, "1");
 			//pstm.setInt(1, bookdata.getBook_Id());
-//			pstm.setString(1, bookdata.getJan());
-//			pstm.setString(2, bookdata.getBook_Name());
-//			pstm.setString(3, bookdata.getPur_Date());
-//			pstm.setInt(4, bookdata.getRent_Check());
-//			pstm.setString(5, bookdata.getImage());
-//			pstm.setString(6, bookdata.getPublisher());
-//			pstm.setString(7, bookdata.getAuthor());
-//			pstm.setString(8, bookdata.getDescription());
+			pstm.setString(1, bookdata.getJan());
+		    pstm.setString(2, bookdata.getBook_Name());
+			pstm.setString(3, bookdata.getPur_Date());
+			pstm.setInt(4, bookdata.getRent_Check());
+			pstm.setString(5, bookdata.getImage());
+ 		    pstm.setString(6, bookdata.getPublisher());
+ 		    pstm.setString(7, bookdata.getAuthor());
+			pstm.setString(8, bookdata.getDescription());
 
 			// SQL文の実行(登録した行数が返される)
-//			int insertedRecode = pstm.executeUpdate();
+			int insertedRecode = pstm.executeUpdate();
 
-//			// 1行登録できたかどうかの確認
-//			if (pstm.executeUpdate() == 1) {
-//				return true; // 登録できたのでtrueを返す
-//			} else {
-//				return false; // 登録できなかったのでfalseを返す
-//			}
+			// 1行登録できたかどうかの確認
+			if ( insertedRecode== 1) {
+				return true; // 登録できたのでtrueを返す
+			} else {
+				return false; // 登録できなかったのでfalseを返す
+			}
 		} catch (SQLException e) {
 			System.out.println(e);
 			// 例外が発生したので、falseを返す
