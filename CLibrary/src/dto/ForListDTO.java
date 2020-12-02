@@ -76,6 +76,14 @@ public class ForListDTO implements java.io.Serializable {
 		schedule = java.sql.Date.valueOf(rentDate.toLocalDate().plusDays(14));
 
 	}
+	//借りられる本のリスト（4）
+	 public ForListDTO(int bookId, String jan, String bookName, int rentCheck) {
+		 this.bookId = bookId;
+		 this.jan = jan;
+		 this.bookName = bookName;
+		 this.rentCheck = rentCheck;
+
+	 }
 	//２週間以上超えている人のリスト用
 	public ForListDTO(Date rentDate) {
 		//貸し出し日に+14日して、返却予定日を計算

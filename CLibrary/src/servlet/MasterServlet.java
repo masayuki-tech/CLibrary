@@ -60,25 +60,28 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		//RequestDispatcher dispatcher=("master.jsp");
 		//dispatcher.forward(request,response)
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/master.jsp");
-		rd.forward(request, response);
+		//RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/master.jsp");
+		//rd.forward(request, response);
 
 		String action = request.getParameter("action");
 
-			if(action.equals("done")) {
+		if(action.equals("done")) {
 				HttpSession session = request.getSession();
-				MasterDAO MasterDAO = new MasterDAO();
-
+			MasterDAO MasterDAO = new MasterDAO();
 						// データベース処理を行うDAOを生成
 						//MasterDAO MasterDAO = new MasterDAO();
 						List<RentlogsDTO> limitOverList=new ArrayList<>();
 						limitOverList =MasterDAO.getSearch();
-						session.setAttribute("limitOver", limitOverList);
-						RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/limitover.jsp");
-						dispatcher.forward(request, response);
+					session.setAttribute("limitOver", limitOverList);
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/limitover.jsp");
+					dispatcher.forward(request, response);
 
-				}
+			}
+		else{
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/master.jsp");
+		rd.forward(request, response);
 
+			}
 		}
 
 
@@ -101,7 +104,7 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 		int rent_check = 0;
 
 		//JSPページを呼び出すためのRequestDispatcher
-		RequestDispatcher rd = null;
+		RequestDispatcher ra = null;
 
 		//gooleへ接続するため
 		URL url = null;
@@ -121,8 +124,8 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 			// エラーメッセージをセッションスコープに保存
 			// 入力用フォームに再度リダイレクト
 			response.sendRedirect("/error.jsp");
-			rd = request.getRequestDispatcher("/error.jsp");
-			rd.forward(request, response);
+			ra = request.getRequestDispatcher("/error.jsp");
+			ra.forward(request, response);
 
 			// book_id列にデータがある場合
 		} else {
@@ -143,8 +146,8 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 		} catch (Exception e) {
 			//例外発生時、error.jspへフォワードする
 			request.setAttribute("error", e.toString());
-			rd = request.getRequestDispatcher("/error.jsp");
-			rd.forward(request, response);
+			ra = request.getRequestDispatcher("/error.jsp");
+			ra.forward(request, response);
 			return;
 		}
 
@@ -156,8 +159,8 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 
 			//レスポンスコードが200以外の場合は、error.jspへフォワードする
 			request.setAttribute("error", "Google Books API　へのリクエストが失敗しました。レスポンスコード：" + responseCode);
-			rd = request.getRequestDispatcher("/error.jsp");
-			rd.forward(request, response);
+			ra = request.getRequestDispatcher("/error.jsp");
+			ra.forward(request, response);
 			return;
 		}
 
@@ -204,8 +207,8 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 
 			//検索結果0の場合、no_result.jspへフォワードする
 			if (count == 0) {
-				rd = request.getRequestDispatcher("/no_result.jsp");
-				rd.forward(request, response);
+				ra = request.getRequestDispatcher("/no_result.jsp");
+				ra.forward(request, response);
 				return;
 			}
 
@@ -282,14 +285,14 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 		} catch (Exception e) {
 			//例外発生時、error.jspへフォワードする
 			request.setAttribute("error", e.toString());
-			rd = request.getRequestDispatcher("/error.jsp");
-			rd.forward(request, response);
+			ra = request.getRequestDispatcher("/error.jsp");
+			ra.forward(request, response);
 			return;
 		}
 
 		//isbn_result.jspへフォワードする
-		rd = request.getRequestDispatcher("/confirm.jsp");
-		rd.forward(request, response);
+		ra = request.getRequestDispatcher("/confirm.jsp");
+		ra.forward(request, response);
 	}
 
 	// 抽出されたデータを利用してJavaBeansを生成

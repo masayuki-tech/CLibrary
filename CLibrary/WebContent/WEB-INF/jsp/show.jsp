@@ -24,7 +24,7 @@
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item px-5 active"><a class="nav-link" href="/"><h4>Home</h4></a>
+				<li class="nav-item px-5 active"><a class="nav-link" href="/CLibrary/WelcomeServlet"><h4>Home</h4></a>
 				</li>
 				<li class="nav-item mt-1"><form mame="show" method="post"
 						action="/CLibrary/WelcomeServlet?target=select">

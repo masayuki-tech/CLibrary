@@ -1,6 +1,8 @@
 package dto;
 
 import java.io.Serializable;
+import java.util.Date;
+
 
 public class BooksDTO implements Serializable{
 	private int book_id;
@@ -28,10 +30,22 @@ public class BooksDTO implements Serializable{
 		this.description=description;
 
 	}
+	//★人気ランキングＴＯＰ3
+		public BooksDTO(String book_name,String jan,String bbb) {
+			this.jan=jan;
+			this.book_name=book_name;
+		}
 
 	public BooksDTO(String book_name, String image) {
 		this.book_name = book_name;
 		this.image = image;
+	}
+	public BooksDTO(int book_id, String jan, String book_name, Date pur_date, int rent_check){
+		this.book_id=book_id;
+		this.jan=jan;
+		this.book_name=book_name;
+		this.pur_date=String.valueOf(pur_date);
+		this.rent_check=rent_check;
 	}
 
 	public int getBook_Id() {

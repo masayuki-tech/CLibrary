@@ -8,6 +8,6 @@
 </head>
 <body>
 登録完了
-<a href="/WEB-INF/jsp/master.jsp">戻る</a>
+<button onclick="location.href='/CLibrary/ToMaster'">トップ画面へ</button>
 </body>
 </html>

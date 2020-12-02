@@ -24,10 +24,15 @@ public class KuramotoDAO {
 	//	final String USER = "javauser";
 	//	final String PASS = "java06pass";
 
+//	//ＤＢ接続用
+//	final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
+//	final String USER = "CLibary";
+//	final String PASS = "CLibrary01";
+
 	//ＤＢ接続用
-	final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
-	final String USER = "CLibary";
-	final String PASS = "CLibrary01";
+	final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
+	final String USER = "team1";
+	final String PASS = "CLibrary";
 
 	//本の登録ＳＱＬ文
 	final String SQL1 = "insert into books (jan,book_name,pur_date,rent_check) values (?,?,?,?)";
@@ -36,7 +41,7 @@ public class KuramotoDAO {
 	//全本の一覧のＳＱＬ文
 	final String SQL3 = "select * from books";
 	//人気の本ランキングＴＯＰ３
-	final String SQL4 = "select book_name,jan,count(*) from rentlogs left join books on rentlogs.book_id=books.book_id group by jan order by count(*) desc limit 3";
+	final String SQL4 = "select book_name,jan,count(*) from rentlogs join books on rentlogs.book_id=books.book_id group by jan order by count(*) desc limit 3";
 	//全貸出履歴の一覧
 	final String SQL5 = "select * from rentlogs left join staffs on rentlogs.staff_id=staffs.staff_id";
 	//貸出中の本リスト（返却期限が迫っている順）
@@ -121,7 +126,7 @@ public class KuramotoDAO {
 				int bookId = rs2.getInt("book_id");//書籍ＩＤ
 				String bookName = rs2.getString("book_name");//本の名前
 				String jan = rs2.getString("jan");//ＪＡＮ
-				String purDate = rs2.getString("pur_date");//購入日
+				Date purDate = rs2.getDate("pur_date");//購入日
 				int rentCheck = rs2.getInt("rent_check");//貸出ステータス
 
 				//BooksDTOコンストラクタに引数を渡す
@@ -154,8 +159,9 @@ public class KuramotoDAO {
 			while (rs3.next()) {
 				String bookName = rs3.getString("book_name");//本の名前
 				String jan = rs3.getString("jan");//ＪＡＮ
+				String bbb=null;
 				//BooksDTOコンストラクタに引数を渡す
-				BooksDTO bd2 = new BooksDTO(bookName, jan);
+				BooksDTO bd2 = new BooksDTO(bookName, jan,bbb);
 				//ArrayListに追加していく
 				list3.add(bd2);
 			}

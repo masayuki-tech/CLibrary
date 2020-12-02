@@ -54,10 +54,14 @@
 			</tr>
 		</c:forEach>
 	</table>
-	<br>
-	<hr>
+	<button class="button"
+		onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
+
+
 	<!---------------------------------------------------------------------------------->
-	<%int count = 0;%>
+	<%
+		int count = 0;
+	%>
 	<table border="1">
 		<tr>
 			<th colspan="3">★人気の本ランキングＴＯＰ３</th>
@@ -79,8 +83,9 @@
 			</tr>
 		</c:forEach>
 	</table>
-	<br>
-	<hr>
+	<button class="button"
+		onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
+
 	<!---------------------------------------------------------------------------------->
 
 	<table border="1">
@@ -109,8 +114,9 @@
 			</tr>
 		</c:forEach>
 	</table>
-	<br>
-	<hr>
+	<button class="button"
+		onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
+
 	<!---------------------------------------------------------------------------------->
 	<table border="1">
 		<tr>
@@ -138,8 +144,9 @@
 			</tr>
 		</c:forEach>
 	</table>
-	<br>
-	<hr>
+	<button class="button"
+		onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
+
 	<!---------------------------------------------------------------------------------->
 
 	<table border="1">
@@ -168,8 +175,9 @@
 			</tr>
 		</c:forEach>
 	</table>
-	<br>
-	<hr>
+	<button class="button"
+		onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
+
 	<!---------------------------------------------------------------------------------->
 	<h2>書籍をあいまい検索</h2>
 	<form action="/CLibrary/KuramotoServlet?target=likeSearch"
@@ -195,20 +203,22 @@
 				<td>${searchLike.getJan()}</td>
 				<td>${searchLike.getBook_Name()}</td>
 				<td>${searchLike.getPur_Date()}</td>
-				<td><form action="/CLibrary/MypageServlet?target=rentKuramoto" method="post">
-							<input type="hidden" name="rentBookId" value="${searchLike.getBookId() }">
-							<input type="hidden" name="rentStaffId" value="${sd.getStaff_Id() }">
-							<input type="submit" value="借りる">
-						</form></td>
+				<td><form action="/CLibrary/MypageServlet?target=rentKuramoto"
+						method="post">
+						<input type="hidden" name="rentBookId"
+							value="${searchLike.getBookId() }"> <input type="hidden"
+							name="rentStaffId" value="${sd.getStaff_Id() }"> <input
+							type="submit" value="借りる">
+					</form></td>
 
 
 			</tr>
 		</c:forEach>
 	</table>
+	<button class="button"
+		onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
 
 
-	<br>
-	<hr>
 	<!---------------------------------------------------------------------------------->
 </body>
 </html>

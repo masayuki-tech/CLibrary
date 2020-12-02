@@ -10,7 +10,7 @@
 <body>
  <table border="1">
         <tr align="center">
-            <th>書籍名</th><th>著者名</th><th>出版社</th><th>発刊日</th><th>表紙</th>
+            <th>書籍名</th><th>著者名</th><th>出版社</th><th>画像</th><th>内容</th>
         </tr>
 
         <%-- ArrayListデータを取り出して表示する --%>
@@ -30,8 +30,11 @@
                 <td><c:out value="${result.getPublisher()}"/></td>
                 <td style="width:600px;border:1px solid #000;word-break: break-all;">
                 <img src="<c:out value="${result. getImage()}"/>"></td>
+                <td><c:out value="${result.getDescription()}"/></td>
             </tr>
-    </table>
-   	<a href="/CLibrary/BookAddServlet?action=done">上記の情報で登録してもいいですか？</a>
+    </table><br>
+    <p>上記の情報で登録してよいですか</p>
+   	<a href="/CLibrary/BookAddServlet?action=done">はい</a>
+   	<button onclick="location.href='/CLibrary/ToMaster'">いいえ</button>
 </body>
 </html>

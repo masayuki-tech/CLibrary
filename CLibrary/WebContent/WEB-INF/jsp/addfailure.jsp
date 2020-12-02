@@ -8,6 +8,6 @@
 </head>
 <body>
 登録失敗
-<a href="/WEB-INF/jsp/master.jsp">戻る</a>
+<button onclick="location.href='/CLibrary/ToMaster'">いいえ</button>
 </body>
 </html>
