@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
 
 	//管理者の情報************************************************
 	final String MM = "aaa@aaa";
-	final String MM_PASS = "000";
+	final String MM_PASS = "00";
 	//************************************************************
 	private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ public class LoginServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8"); //文字コードを指定
 		String target = request.getParameter("target"); //targetパラメーターを受け取る
 		String forwardPath = ""; //フォワード先のパス指定
-
+		//		setRemove(request);//セッションスコープを全削除
 		//切り替え*********************************************
 		switch (target) {
 		case "login":
@@ -60,7 +60,6 @@ public class LoginServlet extends HttpServlet {
 			break;
 		}
 		//****************************************************
-
 		//フォワードを実行するメソッド
 		doForward(request, response, forwardPath);
 	}
@@ -70,6 +69,7 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//		setRemove(request);//セッションスコープを全削除
 
 		request.setCharacterEncoding("UTF-8"); //文字コードを指定
 		String target = request.getParameter("target"); //targetパラメーターを受け取る
@@ -77,15 +77,14 @@ public class LoginServlet extends HttpServlet {
 		//切り替え*********************************************
 		switch (target) {
 		case "login": //ログイン
-			setLogin(request, response);//ログイン画面のメソッドへ
+			toLogin(request, response);//ログイン画面のメソッドへ
 			break;
 
 		case "register": //新規登録
-			setRegister(request, response);//新規登録のメソッドへ
+			toRegister(request, response);//新規登録のメソッドへ
 			break;
+
 		case "toMypage"://マイページに戻る
-			//セッションスコープとリストを消去
-			setRemove(request);
 			toMypage(request, response);//マイページに戻るメソッドへ
 			break;
 		}
@@ -95,7 +94,7 @@ public class LoginServlet extends HttpServlet {
 	//************************************************************************************************
 	//ログイン用のメインメソッド
 	//************************************************************************************************
-	public void setLogin(HttpServletRequest request, HttpServletResponse response)
+	public void toLogin(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String forwardPath = ""; //フォワード先の指定
@@ -104,25 +103,28 @@ public class LoginServlet extends HttpServlet {
 
 		//パラメータの入力値をチェック
 		if (pass != null && pass.length() != 0 && mail != null && mail.length() != 0) {
-
+			//管理者のログインなら管理者ページにフォワード先を指定
 			if (mail.equals(MM) && pass.equals(MM_PASS)) {
 				//フォワード先を管理者ページに指定
 				forwardPath = "/WEB-INF/jsp/master.jsp";
 				//従業員のログイン認証を行う*******************************************
 			} else {
 				//DAOのインスタンスを取得
-				LoginDAO ld = new LoginDAO();
+				LoginDAO ldao = new LoginDAO();
 
-				//ログイン用DAOメソッドを実行し、StaffsDTOインスタンスを取得
-				StaffsDTO sd = ld.getLoginDAO(mail, pass);
+				//ログイン認証できるかを確認
+				boolean connect = ldao.connectLogin(mail, pass);
 
-				//sdがnullじゃなければログイン成功************************************************
-				if (sd != null) {
+				//ログイン成功！************************************************
+				if (connect) {
+					//ユーザー情報を取得する
+					StaffsDTO sd = ldao.getLoginDAO(mail, pass);
+
 					//ログインユーザーのStaffsDTOインスタンスをセッションスコープに保存
 					HttpSession session = request.getSession();
 					session.setAttribute("sd", sd);
 
-					//マイページに表示する「現在借りている本の一覧」を取得するメソッドの実行
+					//マイページに表示する「借りている本の一覧」を取得するメソッドの実行
 					setRentNowList(request, response, mail, pass);
 
 					//マイページに表示する「借りられる本の一覧」を取得するメソッドの実行
@@ -148,47 +150,53 @@ public class LoginServlet extends HttpServlet {
 	//************************************************************************************************
 	//新規登録用メソッド
 	//************************************************************************************************
-	public void setRegister(HttpServletRequest request, HttpServletResponse response)
+	public void toRegister(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String forwardPath = ""; //フォワード先の指定
-		//jspからパラメーターを受け取る
+		//パラメーターを受け取る
 		String name = request.getParameter("name");//氏名
 		String mail = request.getParameter("mail");//メールアドレス
 		String pass = request.getParameter("pass");//パスワード
 		String pass2 = request.getParameter("pass2");//パスワード確認用
 		int gender = Integer.parseInt(request.getParameter("gender"));//性別
 
-		if (pass.equals(pass2)) {
+		if (pass.equals(pass2) && pass.length() >= 7) {
 			//パラメータの入力値をチェック
 			if (name != null && name.length() != 0 && pass != null && pass.length() != 0 && mail != null
 					&& mail.length() != 0) {
 
 				//DAＯのインスタンスを取得
-				LoginDAO dao = new LoginDAO();
+				LoginDAO ldao4 = new LoginDAO();
 
 				//データ結果をbooleanで受け取る
-				boolean isRegister = dao.getRegisterDAO(name, mail, pass, gender);
+				boolean isRegister = ldao4.getRegisterDAO(name, mail, pass, gender);
 
 				//結果がtrueなら
 				if (isRegister) {
 					//ユーザーの情報を取得するメソッド
-					StaffsDTO sd = dao.getUserDAO(name, mail, pass, gender);
-
-					//マイページに表示する「現在借りている本の一覧」を取得するメソッドの実行
-					setRentNowList(request, response, mail, pass);
+					StaffsDTO sd = ldao4.getUserDAO(name, mail, pass, gender);
 
 					//セッションスコープに保存
 					HttpSession session = request.getSession();
 					session.setAttribute("sd", sd);
 
-					//新規登録成功のjspにフォワード
+					//マイページに表示する「現在借りている本の一覧」を取得するメソッドの実行
+					setRentNowList(request, response, mail, pass);
+
+					//マイページに表示する「借りられる本の一覧」を取得するメソッドの実行
+					setCanRentList(request, response);
+
+					//新規登録成功にフォワード
 					forwardPath = "/WEB-INF/jsp/success.jsp";
 
 				} else {
 					//登録失敗画面にフォワード
 					forwardPath = "/WEB-INF/jsp/registerfaile.jsp";
 				}
+			} else {
+				//登録失敗画面にフォワード
+				forwardPath = "/WEB-INF/jsp/registerfaile.jsp";
 			}
 		} else {
 			//登録失敗画面にフォワード
@@ -214,14 +222,15 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		//マイページに表示するためのArrayListを宣言
 		List<ForListDTO> rentNowList = new ArrayList<>();
-		//daoインスタンスを取得
-		LoginDAO dao = new LoginDAO();
-		//現在借りている本リストを取得するdaoのメソッドを実行
-		rentNowList = dao.getRentNowListDAO(mail, pass);
-		//ログインユーザーのStaffsDTOインスタンスをセッションスコープに保存
 		HttpSession session = request.getSession();
-		session.setAttribute("rentNowList", rentNowList);
+		rentNowList.clear();
 
+		//daoインスタンスを取得
+		LoginDAO ldao2 = new LoginDAO();
+		//現在借りている本リストを取得するdaoのメソッドを実行
+		rentNowList = ldao2.getRentNowListDAO(mail, pass);
+		//借りている本のリストをセッションスコープに保存
+		session.setAttribute("rentNowList", rentNowList);
 	}
 
 	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
@@ -229,9 +238,11 @@ public class LoginServlet extends HttpServlet {
 	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 	public void toMypage(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//現在借りているリストの更新
+		//		//セッションスコープを消去
+		//		setRemove(request);
+		//現在借りているリストの取得
 		updateRentNowList(request, response);
-		//マイページに表示する「借りられる本の一覧」を更新
+		//借りられる本のリストを取得
 		setCanRentList(request, response);
 		//フォワードを実行
 		RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/WEB-INF/jsp/mypage.jsp");
@@ -239,43 +250,45 @@ public class LoginServlet extends HttpServlet {
 	}
 
 	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
-	//Myページに戻る前に、現在借りている本のリストを更新するメソッド
+	//Myページに戻る前に、現在借りている本のリストを取得するメソッド
 	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 	public void updateRentNowList(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		//セッションからインスタンスを取得
 		HttpSession session = request.getSession();
-		StaffsDTO sd = (StaffsDTO) session.getAttribute("sd");
-		String mail = sd.getMail();
-		String pass = sd.getPass();
+		StaffsDTO sd3 = (StaffsDTO) session.getAttribute("sd");
+		String mail = sd3.getMail();//メールアドレス
+		String pass = sd3.getPass();//パスワード
 		//マイページに表示する「現在借りている本の一覧」を取得するメソッドの実行
 		setRentNowList(request, response, mail, pass);
 	}
-	//****************************************************************************************
-		//借りられる本のリストを取得する
-		//****************************************************************************************
-		public void setCanRentList(HttpServletRequest request, HttpServletResponse response)
-				throws ServletException, IOException {
-			//マイページに表示するためのArrayListを宣言
-			List<ForListDTO> canRentList = new ArrayList<>();
-			//daoインスタンスを取得
-			LoginDAO dao = new LoginDAO();
-			//現在借りている本リストを取得するdaoのメソッドを実行
-			canRentList = dao.getCanRentListDAO();
-			//ログインユーザーのStaffsDTOインスタンスをセッションスコープに保存
-			HttpSession session = request.getSession();
-			session.setAttribute("canRentList", canRentList);
 
-		}
-		//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
-		//セッションスコープを削除するメソッド
-		//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
-		public void setRemove(HttpServletRequest request) {
-			HttpSession session = request.getSession();
-			session.removeAttribute("canRentList");
-			session.removeAttribute("rentNowList");
-//			//rentNowListの削除
-//			rentNowList.clear();
-//			canRentList.clear();
-		}
+	//****************************************************************************************
+	//借りられる本のリストを取得する
+	//****************************************************************************************
+	public void setCanRentList(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		//マイページに表示するためのArrayListを宣言
+		List<ForListDTO> canRentList = new ArrayList<>();
+		canRentList.clear();
+
+		HttpSession session = request.getSession();
+
+		//daoインスタンスを取得
+		LoginDAO ldao3 = new LoginDAO();
+		//現在借りている本リストを取得するdaoのメソッドを実行
+		canRentList = ldao3.getCanRentListDAO();
+		//ログインユーザーのStaffsDTOインスタンスをセッションスコープに保存
+		session.setAttribute("canRentList", canRentList);
+	}
+
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	//セッションスコープを削除するメソッド
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	public void setRemove(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		session.removeAttribute("sd");
+		session.removeAttribute("canRentList");
+		session.removeAttribute("rentNowList");
+	}
 }
