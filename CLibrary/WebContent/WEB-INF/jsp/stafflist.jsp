@@ -30,6 +30,10 @@
 			</tr>
 		</c:forEach>
 	</table>
+	<form action="/CLibrary/MasterServlet?target=tomaster" method="post">
+		<input type="submit" value="戻る">
+		</form><br>
+
 	<button class="button"
 					onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
 	<!--------------------------------------------------------------------------------------->
