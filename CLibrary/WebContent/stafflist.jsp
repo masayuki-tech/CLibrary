@@ -5,10 +5,23 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/stafflist.css">
 <title>登録従業員の一覧</title>
 </head>
 <body>
 <!--------------------------------------------------------------------------------------->
+<div class="login_header">
+        <div class="header_item">
+            <h1>CLibrary</h1>
+        </div>
+        <div class="header_item">
+            <h1>マスターページ</h1>
+        </div>
+        <div class="header_item mt-3">
+            <a class="right_list_crrent_user " href="/CLibrary/LoginServlet?target=login">ログアウト</a>
+        </div>
+    </div>
 	<table border="1">
 		<tr>
 			<th colspan="5">登録ユーザー(従業員)の一覧</th>

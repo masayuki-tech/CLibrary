@@ -99,11 +99,15 @@ a {
 
 .message{
 	text-align: center;
-	margin-top: 100px;
+	padding: 50px;
 }
 
 .top_button{
 	text-align: center;
-	margin-top: 100px;
+	padding-bottom: 50px;
 }
 
+button {
+	width: 200px;
+    height: 50px;
+}
