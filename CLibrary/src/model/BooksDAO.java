@@ -32,12 +32,9 @@ public class BooksDAO {
 
 			while (bk.next()) {
 
-				int book_id = bk.getInt("book_id");
-				String jan = bk.getString("jan");
 				String book_name = bk.getString("book_name");
-				String pur_date = bk.getString("pur_date");
-				int rent_check = bk.getInt("rent_check");
-				BooksDTO bookData = new BooksDTO(book_id, jan, book_name, pur_date, rent_check);
+				String image = bk.getString("image");
+				BooksDTO bookData = new BooksDTO(book_name, image);
 				booksAllList.add(bookData);
 
 			}
@@ -48,8 +45,8 @@ public class BooksDAO {
 		SQLException e)
 
 		{
-			BooksDTO bookData = new BooksDTO(1, "12345", "あああ", "2000-01-01", 1);
-			BooksDTO bookData2 = new BooksDTO(2, "22345", "いいい", "2000-02-01", 2);
+			BooksDTO bookData = new BooksDTO("Java参考書", "https://books.google.com/books?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=2&edge=curl&source=gbs_api");
+			BooksDTO bookData2 = new BooksDTO("PHP参考書", "bbbbbb");
 			booksAllList.add(bookData);
 			booksAllList.add(bookData2);
 			return booksAllList;
