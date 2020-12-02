@@ -32,6 +32,6 @@
                 <img src="<c:out value="${result. getImage()}"/>"></td>
             </tr>
     </table>
-   	<a href="/CLibrary/masterServlet?action=ok">上記の情報で登録してもいいですか？</a>
+   	<a href="/CLibrary/BookAddServlet?action=done">上記の情報で登録してもいいですか？</a>
 </body>
 </html>

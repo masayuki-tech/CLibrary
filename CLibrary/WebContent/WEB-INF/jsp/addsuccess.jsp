@@ -8,6 +8,6 @@
 </head>
 <body>
 登録完了
-<a href="master.jsp">戻る</a>
+<a href="/master.jsp">戻る</a>
 </body>
 </html>

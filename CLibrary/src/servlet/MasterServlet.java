@@ -64,78 +64,24 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 		rd.forward(request, response);
 
 		String action = request.getParameter("action");
-		HttpSession session = request.getSession();
-		MasterDAO MasterDAO = new MasterDAO();
-		String forwardPath = "";
-		switch (action) {
-		case "done":
 
+			if(action.equals("done")) {
+				HttpSession session = request.getSession();
+				MasterDAO MasterDAO = new MasterDAO();
 
-			// データベース処理を行うDAOを生成
+						// データベース処理を行うDAOを生成
+						//MasterDAO MasterDAO = new MasterDAO();
+						List<RentlogsDTO> limitOverList=new ArrayList<>();
+						limitOverList =MasterDAO.getSearch();
+						session.setAttribute("limitOver", limitOverList);
+						RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/limitover.jsp");
+						dispatcher.forward(request, response);
 
-			List<RentlogsDTO> limitOverList = new ArrayList<>();
-			limitOverList = MasterDAO.getSearch();
-			session.setAttribute("limitOver", limitOverList);
-			forwardPath ="/WEB-INF/jsp/limitover.jsp";
-			break;
-		case "ok":
-
-			// データベース処理を行うDAOを生成
-			BooksDTO bookdata = new BooksDTO();
-			bookdata = (BooksDTO) session.getAttribute("result");
-
-
-			// DAO内に定義されているデータ登録用のメソッドを実行し、その結果を保存
-			boolean isInsert = MasterDAO.insert(bookdata);
-
-			// メソッドの実行結果によって、切り替えるJSPファイル名を決定
-			if (isInsert) {
-				forwardPath = "/WEB-INF/jsp/addsuccess.jsp";
-			} else {
-				forwardPath = "/WEB-INF/jsp/addfailure.jsp";
-			}
-			break;
-			//if(action.equals("done")) {
-			//			HttpSession session = request.getSession();
-			//
-			//
-			//			// データベース処理を行うDAOを生成
-			//			MasterDAO MasterDAO = new MasterDAO();
-			//			List<RentlogsDTO> limitOverList=new ArrayList<>();
-			//			limitOverList =MasterDAO.getSearch();
-			//			session.setAttribute("limitOver", limitOverList);
-			//			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/limitover.jsp");
-			//			dispatcher.forward(request, response);
-			//
-			//		}
-			//
-			//		else if(action.equals("ok")) {
-			//			HttpSession session = request.getSession();
-			//
-			//
-			//			// データベース処理を行うDAOを生成
-			//			MasterDAO MasterDAO = new MasterDAO();
-			//			BooksDTO bookdata=new BooksDTO();
-			//			bookdata = (BooksDTO) session.getAttribute("result");
-			//			String forwardPath = "";
-			//
-			//			// DAO内に定義されているデータ登録用のメソッドを実行し、その結果を保存
-			//			boolean isInsert = MasterDAO.insert(bookdata);
-			//
-			//			// メソッドの実行結果によって、切り替えるJSPファイル名を決定
-			//			if (isInsert) {
-			//				forwardPath = "/WEB-INF/jsp/addsuccess.jsp";
-			//			} else {
-			//				forwardPath ="/WEB-INF/jsp/addfailure.jsp";
-			//			}
-
-			// JSPファイルに処理を切り替え
-
+				}
 
 		}
-		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
-		dispatcher.forward(request, response);
-	}
+
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -151,6 +97,7 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 		int book_id = 0;
 		String jan = request.getParameter("isbn");
 		String pur_date = request.getParameter("pur_date");
+		//String pur_date=pur_date0.replace("/", "");
 		int rent_check = 0;
 
 		//JSPページを呼び出すためのRequestDispatcher
@@ -326,7 +273,7 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 
 			//検索結果データの追加
 			BooksDTO BooksDTO1 = new BooksDTO(book_id, jan, book_name, pur_date, rent_check, image,
-					publisher, author, "a");
+					publisher, author, description );
 			//}
 
 			//disp.jspへ渡すデータを格納

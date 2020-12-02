@@ -12,9 +12,10 @@
 	<a>本の登録</a>
 	<form action="/CLibrary/MasterServlet" method="post">
 		ISBN：<input type="text" name="isbn"><br>
-		購入日：<input type="date"name="pur_date" required><br>
+		購入日：<input type="text"name="pur_date" required><br>
 			<input type="submit" value="登録" name="button_name"></form>
 		<form action="/CLibrary/MasterServlet" method="get"></form>
-		<a href="/CLibrary/masterServlet?action=done">二週間以上の遅延発生者</a>
+		<a href="/CLibrary/MasterServlet?action=done">二週間以上の遅延発生者</a>
+		a
 </body>
 </html>
