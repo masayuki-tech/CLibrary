@@ -24,7 +24,7 @@
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item px-5 active"><a class="nav-link" href="/CLibrary/WelcomeServlet"><h4>Home</h4></a>
+				<li class="nav-item px-5 active"><a class="nav-link" href="/"><h4>Home</h4></a>
 				</li>
 				<li class="nav-item mt-1"><form mame="show" method="post"
 						action="/CLibrary/WelcomeServlet?target=select">
@@ -49,8 +49,8 @@
 	<div class="container">
 		<div class="d-flex books mt-4 flex-wrap">
 			<c:forEach var="bookData" items="${ booksAllList }">
-				<div class="bookContent mb-3 bg-dark overflow-sc"
-					style="padding: 0; width: 355px; margin-right: 15px;">
+				<div class="bookContent mb-3 overflow-sc"
+					style="padding: 0; width: 257px; margin-right: 14px;">
 					<div class="bookTitle p-2">
 						<c:out value="${bookData.getBook_Name()}" />
 					</div>

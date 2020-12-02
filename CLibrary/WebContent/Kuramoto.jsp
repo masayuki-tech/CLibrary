@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<!--------------------------------------------------------------------------------------->
+	<%-- <!--------------------------------------------------------------------------------------->
 	<table border="1">
 		<tr>
 			<th colspan="5">登録従業員の一覧</th>
@@ -31,8 +31,8 @@
 		</c:forEach>
 	</table>
 	<br>
-	<hr>
-	<!---------------------------------------------------------------------------------->
+	<hr> --%>
+	<%-- <!---------------------------------------------------------------------------------->
 	<table border="1">
 		<tr>
 			<th colspan="5">全本の一覧</th>
@@ -58,7 +58,7 @@
 		onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
 
 
-	<!---------------------------------------------------------------------------------->
+	<!----------------------------------------------------------------------------------> --%>
 	<%
 		int count = 0;
 	%>
@@ -86,7 +86,7 @@
 	<button class="button"
 		onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
 
-	<!---------------------------------------------------------------------------------->
+	<%-- <!---------------------------------------------------------------------------------->
 
 	<table border="1">
 		<tr>
@@ -117,8 +117,8 @@
 	<button class="button"
 		onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
 
-	<!---------------------------------------------------------------------------------->
-	<table border="1">
+	<!----------------------------------------------------------------------------------> --%>
+	<%-- <table border="1">
 		<tr>
 			<th colspan="7">貸出中リスト</th>
 		</tr>
@@ -147,9 +147,9 @@
 	<button class="button"
 		onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
 
-	<!---------------------------------------------------------------------------------->
+	<!----------------------------------------------------------------------------------> --%>
 
-	<table border="1">
+	<%-- <table border="1">
 		<tr>
 			<th colspan="7">2週間以上延滞リスト</th>
 		</tr>
@@ -175,10 +175,14 @@
 			</tr>
 		</c:forEach>
 	</table>
+	<form action="/CLibrary/MasterServlet?target=tomaster" method="post">
+		<input type="submit" value="戻る">
+		</form><br>
+
 	<button class="button"
 		onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
 
-	<!---------------------------------------------------------------------------------->
+	<!----------------------------------------------------------------------------------> --%>
 	<h2>書籍をあいまい検索</h2>
 	<form action="/CLibrary/KuramotoServlet?target=likeSearch"
 		method="post">
@@ -215,6 +219,9 @@
 			</tr>
 		</c:forEach>
 	</table>
+	<form action="/CLibrary/MasterServlet?target=tomaster" method="post">
+		<input type="submit" value="戻る">
+		</form><br>
 	<button class="button"
 		onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
 
