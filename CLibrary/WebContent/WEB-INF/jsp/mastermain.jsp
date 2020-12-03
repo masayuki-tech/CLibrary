@@ -17,6 +17,11 @@
     <br>
     <!---------------------------------------------------------------------------------->
 
+<form action="/CLibrary/BookAddServlet" method="post">
+        <input type="submit" value="書籍を登録" class="btn btn-info btn-lg btn-block">
+    </form>
+    <br>
+
     <form action="/CLibrary/MasterServlet?target=staffAll" method="post">
         <input type="submit" value="登録ユーザー(従業員)の一覧" class="btn btn-info btn-lg btn-block">
     </form>

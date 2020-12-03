@@ -27,7 +27,7 @@
             <h2>ISBN番号と購入日を入力して下さい。</h2>
         </div>
         <div class="login_form">
-            <form action="/CLibrary/MasterServlet" method="post">
+            <form action="/CLibrary/MasterServlet?target=bookinput" method="post">
                 <div class="register mt-4 mb-4">
                     <div class="keyword">ISBN</div><input autofocus="autofocus" placeholder="例）123A456B78" type="text" name="isbn" required><br>
                 </div>
@@ -35,7 +35,7 @@
                     <div class="keyword">購入日</div><input placeholder="例）2020-03-05" type="date" name="pur_date" required><br>
                 </div>
                 <div class="login_button mb-4">
-                    <input type="hidden" name="target" value="login">
+                    <input type="hidden" name="target" value="bookinput">
                     <input class="button" type="submit" value="登録する">
                 </div>
             </form>

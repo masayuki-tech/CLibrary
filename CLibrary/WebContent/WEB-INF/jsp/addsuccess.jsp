@@ -29,7 +29,7 @@
 			<h1>登録完了しました</h1>
 		</div>
 		<div class="top_button">
-			<button onclick="location.href='/CLibrary/ToMaster'">トップ画面へ</button>
+			<button onclick="location.href='/CLibrary/ToMaster'">戻る</button>
 		</div>
 	</div>
 </body>

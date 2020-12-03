@@ -59,6 +59,7 @@ public class BookAddServlet extends HttpServlet {
 			}
 break;
 
+
 					}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
 		dispatcher.forward(request, response);
@@ -71,6 +72,9 @@ break;
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/master.jsp");
+		dispatcher.forward(request, response);
+
 	}
 
 }
