@@ -23,15 +23,15 @@
     <br>
 
     <form action="/CLibrary/MasterServlet?target=booksAll" method="post">
-        <input type="submit" value="蔵書一覧" class="btn btn-info btn-lg btn-block">
+        <input type="submit" value="全書籍一覧" class="btn btn-info btn-lg btn-block">
     </form>
     <br>
     <form action="/CLibrary/MasterServlet?target=rentAll" method="post">
-        <input type="submit" value="貸出履歴" class="btn btn-info btn-lg btn-block">
+        <input type="submit" value="貸出簿" class="btn btn-info btn-lg btn-block">
     </form>
     <br>
     <form action="/CLibrary/MasterServlet?target=rentnow" method="post">
-        <input type="submit" value="現在貸出中の本一覧" class="btn btn-info btn-lg btn-block">
+        <input type="submit" value="貸出中の書籍一覧" class="btn btn-info btn-lg btn-block">
     </form>
     <br>
     <form action="/CLibrary/MasterServlet?target=2weeks" method="post">

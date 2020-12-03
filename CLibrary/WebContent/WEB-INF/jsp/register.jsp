@@ -28,7 +28,7 @@
 			<h2>氏名、ログインＩＤ（メールアドレス）、パスワード、性別を入力して下さい。</h2>
 		</div>
 		<div class="login_form">
-			<form action="/CLibrary/LoginServlet?target=login" method="post">
+			<form action="/CLibrary/LoginServlet?target=register" method="post">
 				<input type="hidden" name="target" value="register">
 				<div class="register">
 					<div class="keyword">氏名</div>
@@ -45,7 +45,7 @@
 				</div>
 				<div class="register mb-4">
 					<div class="keyword">確認用パスワード</div>
-					<input class="data" placeholder="7文字以上の半角英数字" type="password" name="pass"
+					<input class="data" placeholder="7文字以上の半角英数字" type="password" name="pass2"
 						required><br>
 				</div>
 				<div class="register">

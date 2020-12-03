@@ -32,7 +32,7 @@
 		</tr>
 		<tr>
 			<td>社員管理ID</td>
-			<td>氏名</td>
+			<td>社員名</td>
 			<td>メールアドレス</td>
 			<td>パスワード</td>
 			<td>性別</td>
@@ -43,10 +43,22 @@
 				<td>${staffs.getName()}</td>
 				<td>${staffs.getMail()}</td>
 				<td>${staffs.getPass() }</td>
-				<td>${staffs.getGender()}</td>
+				<td><c:if test="${staffs.getGender()==1}">
+				男性
+				</c:if>
+				<c:if test="${staffs.getGender()==2}">
+				女性
+				</c:if>
+				<c:if test="${staffs.getGender()==0}">
+				未回答
+				</c:if></td>
 			</tr>
 		</c:forEach>
 	</table>
+	<form action="/CLibrary/MasterServlet?target=tomaster" method="post">
+		<input type="submit" value="戻る">
+	</form>
+	<br>
 	<div class="top_button">
 		<button class="button"
 			onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>

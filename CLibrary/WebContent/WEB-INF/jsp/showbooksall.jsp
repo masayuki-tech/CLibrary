@@ -43,7 +43,12 @@
 				<td>${books.getBook_Name()}</td>
 				<td>${books.getJan()}</td>
 				<td>${books.getPur_Date() }</td>
-				<td>${books.getRent_Check()}</td>
+				<td><c:if test="${books.getRent_Check()==0}">
+				―
+				</c:if>
+				<c:if test="${books.getRent_Check()==1}">
+				貸出中
+				</c:if></td>
 			</tr>
 		</c:forEach>
 	</table>

@@ -14,8 +14,23 @@ a{
 	color: black;
 }
 
+.search_box{
+	margin: auto;
+    width: 280px;
+    padding-top: 60px;
+}
+
+.form-group{
+	display: flex;
+}
+.form-control{
+	width: 200px;
+    height: 50px;
+    margin-right: 20px;
+}
+
 .container{
-	margin-top: 200px;
+	margin-top: 50px;
 }
 
 .jumbotron {

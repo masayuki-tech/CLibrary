@@ -27,7 +27,7 @@
 				</li>
 				<li class="nav-item mt-1"><form name="show" method="post"
 						action="/CLibrary/WelcomeServlet?target=select">
-						<a class="nav-link" href="javascript:show.submit()"><h5>一覧を表示する</h5></a>
+						<a class="nav-link" href="javascript:show.submit()"><h5>書籍を探す</h5></a>
 					</form></li>
 			</ul>
 			<div class="form-inline my-2 my-lg-0">

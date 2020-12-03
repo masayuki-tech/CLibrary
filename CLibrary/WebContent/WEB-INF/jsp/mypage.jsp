@@ -33,8 +33,7 @@
 				<c:out value="${sd.name }" />
 				さん
 			</div>
-			<a class="right_list_crrent_user "
-				href="/CLibrary/WelcomeServlet">ログアウト</a>
+			<a class="right_list_crrent_user " href="/CLibrary/WelcomeServlet">ログアウト</a>
 		</div>
 	</div>
 	<div class="container">
@@ -47,34 +46,43 @@
 
 				<br>
 				<!-- <form action="/CLibrary/MypageServlet?target=rent" method="post"> -->
-				<table border="1">
-					<tr>
-						<th colspan="4">貸し出し中一覧</th>
-					</tr>
 
-					<tr>
-						<td>書籍名</td>
-						<td>貸出日</td>
-						<td>返却予定日</td>
-						<td></td>
-					</tr>
-					<c:forEach var="result" items="${rentNowList }">
-						<tr>
-							<td>${result.getBookName() }</td>
-							<td>${result.getRentDate() }</td>
-							<td>${result.getSchedule() }</td>
-							<td>
-								<form action="/CLibrary/MypageServlet?target=returnKuramoto"
-									method="post">
-									<input type="hidden" name="returnBookId"
-										value="${result.getBookId() }"> <input type="hidden"
-										name="returnRentId" value="${result.getRentId() }"> <input
-										type="submit" value="返却">
-								</form>
-							</td>
-						</tr>
-					</c:forEach>
-				</table>
+
+
+
+				<h2>貸し出し中一覧</h2>
+
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>書籍名</th>
+								<th>貸出日</th>
+								<th>返却予定日</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="result" items="${rentNowList }">
+								<tr>
+									<td scope="row">${result.getBookName() }</td>
+									<td>${result.getRentDate() }</td>
+									<td>${result.getSchedule() }</td>
+									<td>
+										<form action="/CLibrary/MypageServlet?target=returnKuramoto"
+											method="post">
+											<input type="hidden" name="returnBookId"
+												value="${result.getBookId() }"> <input type="hidden"
+												name="returnRentId" value="${result.getRentId() }">
+											<input type="submit" value="返却">
+										</form>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+
 			</c:if>
 		</div>
 		<%-- <div class="mypage_rentAll mb-5">

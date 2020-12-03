@@ -9,7 +9,7 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
 	integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
 	crossorigin="anonymous">
-<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/search.css">
 <title>一覧 例</title>
 </head>
 <body>
@@ -24,11 +24,11 @@
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item px-5 active"><a class="nav-link" href="/"><h4>Home</h4></a>
+				<li class="nav-item px-5 active"><a class="nav-link" href="/CLibrary/WelcomeServlet"><h4>Home</h4></a>
 				</li>
 				<li class="nav-item mt-1"><form mame="show" method="post"
 						action="/CLibrary/WelcomeServlet?target=select">
-						<a class="nav-link" href="javascript:show.submit()"><h5>一覧を表示する</h5></a>
+						<a class="nav-link" href="javascript:show.submit()"><h5>書籍を探す</h5></a>
 					</form></li>
 			</ul>
 			<div class="form-inline my-2 my-lg-0">
@@ -47,15 +47,15 @@
 		</div>
 	</nav>
 	<div class="search_box">
-		<form action="/CLibrary/BookSearchServlet?target=likeSearchMain"
-			method="post" class=”form-group”>
-			<div class="form-group">
-				<input type="text" name="text" class=”form-control”
-					placeholder="キーワードを入力"> <input type="submit" value="検索"
-					class="btn btn-primary btn-lg">
-			</div>
-		</form>
-	</div>
+			<form action="/CLibrary/BookSearchServlet?target=likeSearchMain"
+				method="post" class=”form-group”>
+				<div class="form-group">
+					<input type="text" name="text" class="form-control"
+						placeholder="キーワードで検索"> <input type="submit" value="検索"
+						class="btn btn-primary btn-lg">
+				</div>
+			</form>
+		</div>
 	<div class="container">
 		<div class="d-flex books mt-4 flex-wrap">
 			<c:forEach var="bookData" items="${ booksAllList }">

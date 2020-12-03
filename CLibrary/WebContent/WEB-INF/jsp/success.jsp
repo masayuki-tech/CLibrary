@@ -17,7 +17,11 @@
 
 
 
-	<button onclick="location.href='/WEB-INF/jsp/mypage.jsp'">Ｍｙページへ</button>
+	<form action="/CLibrary/LoginServlet?target=toMypage" method="post">
+		<input type="hidden" name="mail" value="${sd.mail }"> <input
+			type="hidden" name="pass" value="${sd.pass }"> <input
+			type="submit" value="Ｍｙページへ">
+	</form>
 	<button onclick="location.href='/CLibrary/WelcomeServlet'">トップ画面へ</button>
 </body>
 </html>
