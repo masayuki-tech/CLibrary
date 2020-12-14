@@ -26,7 +26,7 @@ public class BookData {
 		this.description = description;
 	}
 
-    //ゲッター・セッターメソッド
+    //getter &setter **********************************************************
 	public String getTitle() {
 		return title;
 	}

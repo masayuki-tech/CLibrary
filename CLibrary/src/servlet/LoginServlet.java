@@ -2,7 +2,6 @@ package servlet;
 
 //ログイン系の補助サーブレット
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -25,8 +24,8 @@ import model.LoginDAO;
 public class LoginServlet extends HttpServlet {
 
 	//管理者の情報************************************************
-	final String MM = "aaa@aaa";
-	final String MM_PASS = "00";
+	final String MM = "admin@com";
+	final String MM_PASS = "0000000";
 	//************************************************************
 	private static final long serialVersionUID = 1L;
 
@@ -35,7 +34,6 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public LoginServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -47,16 +45,14 @@ public class LoginServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8"); //文字コードを指定
 		String target = request.getParameter("target"); //targetパラメーターを受け取る
 		String forwardPath = ""; //フォワード先のパス指定
-		//		setRemove(request);//セッションスコープを全削除
+
 		//切り替え*********************************************
 		switch (target) {
-		case "login":
-			//フォワード先をログイン画面に指定（login.jsp）
+		case "login"://ログイン画面へ
 			forwardPath = "/WEB-INF/jsp/login.jsp";
 			break;
 
-		case "register":
-			//フォワード先を新規登録画面に指定（register.jsp）
+		case "register"://新規登録画面へ
 			forwardPath = "/WEB-INF/jsp/register.jsp";
 			break;
 		}
@@ -70,7 +66,6 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//		setRemove(request);//セッションスコープを全削除
 
 		request.setCharacterEncoding("UTF-8"); //文字コードを指定
 		String target = request.getParameter("target"); //targetパラメーターを受け取る
@@ -92,9 +87,9 @@ public class LoginServlet extends HttpServlet {
 		//****************************************************
 	}
 
-	//************************************************************************************************
-	//ログイン用のメインメソッド
-	//************************************************************************************************
+	//*******************************************************************
+	//ログインするメソッド
+	//*******************************************************************
 	public void toLogin(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -108,22 +103,19 @@ public class LoginServlet extends HttpServlet {
 			if (mail.equals(MM) && pass.equals(MM_PASS)) {
 				//フォワード先を管理者ページに指定
 				forwardPath = "/WEB-INF/jsp/mastermain.jsp";
-				//従業員のログイン認証を行う*******************************************
-			} else {
-				//DAOのインスタンスを取得
-				LoginDAO ldao = new LoginDAO();
 
+				//ユーザーのログイン認証を行う*******************************************
+			} else {
 				//ログイン認証できるかを確認
-				boolean connect = ldao.connectLogin(mail, pass);
+				boolean connect = new LoginDAO().connectLogin(mail, pass);
 
 				//ログイン成功！************************************************
 				if (connect) {
 					//ユーザー情報を取得する
-					StaffsDTO sd = ldao.getLoginDAO(mail, pass);
+					StaffsDTO sd = new LoginDAO().getLoginUser(mail, pass);
 
 					//ログインユーザーのStaffsDTOインスタンスをセッションスコープに保存
-					HttpSession session = request.getSession();
-					session.setAttribute("sd", sd);
+					request.getSession().setAttribute("sd", sd);
 
 					//マイページに表示する「借りている本の一覧」を取得するメソッドの実行
 					setRentNowList(request, response, mail, pass);
@@ -133,6 +125,7 @@ public class LoginServlet extends HttpServlet {
 
 					//人気の本TOP5
 					top5(request, response);
+
 					//Myページにフォワード先を指定
 					forwardPath = "/WEB-INF/jsp/mypage.jsp";
 
@@ -156,7 +149,9 @@ public class LoginServlet extends HttpServlet {
 	public void toRegister(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String forwardPath = ""; //フォワード先の指定
+		//フォワード先の指定（初期値をregisterfaile.jspに設定）
+		String forwardPath = "/WEB-INF/jsp/registerfaile.jsp";
+
 		//パラメーターを受け取る
 		String name = request.getParameter("name");//氏名
 		String mail = request.getParameter("mail");//メールアドレス
@@ -169,20 +164,16 @@ public class LoginServlet extends HttpServlet {
 			if (name != null && name.length() != 0 && pass != null && pass.length() != 0 && mail != null
 					&& mail.length() != 0) {
 
-				//DAＯのインスタンスを取得
-				LoginDAO ldao4 = new LoginDAO();
-
 				//データ結果をbooleanで受け取る
-				boolean isRegister = ldao4.getRegisterDAO(name, mail, pass, gender);
+				boolean isRegister = new LoginDAO().getRegisterDAO(name, mail, pass, gender);
 
 				//結果がtrueなら
 				if (isRegister) {
 					//ユーザーの情報を取得するメソッド
-					StaffsDTO sd = ldao4.getUserDAO(name, mail, pass, gender);
+					StaffsDTO sd = new LoginDAO().getUserDAO(name, mail, pass, gender);
 
 					//セッションスコープに保存
-					HttpSession session = request.getSession();
-					session.setAttribute("sd", sd);
+					request.getSession().setAttribute("sd", sd);
 
 					//マイページに表示する「現在借りている本の一覧」を取得するメソッドの実行
 					setRentNowList(request, response, mail, pass);
@@ -197,16 +188,13 @@ public class LoginServlet extends HttpServlet {
 					forwardPath = "/WEB-INF/jsp/success.jsp";
 
 				} else {
-					//登録失敗画面にフォワード
-					forwardPath = "/WEB-INF/jsp/registerfaile.jsp";
+					//登録失敗画面にフォワード（初期値のまま）
 				}
 			} else {
-				//登録失敗画面にフォワード
-				forwardPath = "/WEB-INF/jsp/registerfaile.jsp";
+				//登録失敗画面にフォワード（初期値のまま）
 			}
 		} else {
-			//登録失敗画面にフォワード
-			forwardPath = "/WEB-INF/jsp/registerfaile.jsp";
+			//登録失敗画面にフォワード（初期値のまま）
 		}
 		//フォワードを実行するメソッド
 		doForward(request, response, forwardPath);
@@ -226,16 +214,12 @@ public class LoginServlet extends HttpServlet {
 	//****************************************************************************************
 	public void setRentNowList(HttpServletRequest request, HttpServletResponse response, String mail, String pass)
 			throws ServletException, IOException {
-		//マイページに表示するためのArrayListを宣言
-		List<ForListDTO> rentNowList = new ArrayList<>();
-		HttpSession session = request.getSession();
-		rentNowList.clear();
 
-		//daoインスタンスを取得
-		LoginDAO ldao2 = new LoginDAO();
 		//現在借りている本リストを取得するdaoのメソッドを実行
-		rentNowList = ldao2.getRentNowListDAO(mail, pass);
+		List<ForListDTO> rentNowList = new LoginDAO().getRentNowListDAO(mail, pass);
+
 		//借りている本のリストをセッションスコープに保存
+		HttpSession session = request.getSession();
 		session.setAttribute("rentNowList", rentNowList);
 	}
 
@@ -244,29 +228,31 @@ public class LoginServlet extends HttpServlet {
 	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 	public void toMypage(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//		//セッションスコープを消去
-		//		setRemove(request);
-		//現在借りているリストの取得
+
+		//現在借りているリストの取得メソッドを実行
 		updateRentNowList(request, response);
-		//借りられる本のリストを取得
+
+		//借りられる本のリストを取得メソッドを実行
 		setCanRentList(request, response);
-		//人気の本TOP5
+
+		//人気の本TOP5メソッドを実行
 		top5(request, response);
-		//フォワードを実行
-		RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/WEB-INF/jsp/mypage.jsp");
-		dispatcherLogin.forward(request, response);
+
+		//フォワードするメソッドを実行してmypage.jspへ
+		doForward(request, response, "/WEB-INF/jsp/mypage.jsp");
 	}
 
-	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	//**********************************************************
 	//Myページに戻る前に、現在借りている本のリストを取得するメソッド
-	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	//**********************************************************
 	public void updateRentNowList(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//セッションからインスタンスを取得
-		HttpSession session = request.getSession();
-		StaffsDTO sd3 = (StaffsDTO) session.getAttribute("sd");
-		String mail = sd3.getMail();//メールアドレス
-		String pass = sd3.getPass();//パスワード
+
+		//セッションからsdインスタンスを取得
+		StaffsDTO sd = (StaffsDTO) request.getSession().getAttribute("sd");
+		String mail = sd.getMail();//メールアドレス
+		String pass = sd.getPass();//パスワード
+
 		//マイページに表示する「現在借りている本の一覧」を取得するメソッドの実行
 		setRentNowList(request, response, mail, pass);
 	}
@@ -276,51 +262,34 @@ public class LoginServlet extends HttpServlet {
 	//****************************************************************************************
 	public void setCanRentList(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//マイページに表示するためのArrayListを宣言
-		List<ForListDTO> canRentList = new ArrayList<>();
-		canRentList.clear();
 
-		HttpSession session = request.getSession();
-
-		//daoインスタンスを取得
-		LoginDAO ldao3 = new LoginDAO();
 		//現在借りている本リストを取得するdaoのメソッドを実行
-		canRentList = ldao3.getCanRentListDAO();
-		//ログインユーザーのStaffsDTOインスタンスをセッションスコープに保存
-		session.setAttribute("canRentList", canRentList);
-	}
+		List<ForListDTO>canRentList = new LoginDAO().getCanRentListDAO();
 
-	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
-	//セッションスコープを削除するメソッド
-	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
-	public void setRemove(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		session.removeAttribute("sd");
-		session.removeAttribute("canRentList");
-		session.removeAttribute("rentNowList");
+		//ログインユーザーのStaffsDTOインスタンスをセッションスコープに保存
+		request.getSession().setAttribute("canRentList", canRentList);
 	}
 
 	//**********************************************************
-	//★人気の本ランキングＴＯＰ5を取得するメソッド
+	//セッションスコープを削除するメソッド
+	//**********************************************************
+	public void setRemove(HttpServletRequest request) {
+		request.getSession().removeAttribute("sd");
+		request.getSession().removeAttribute("canRentList");
+		request.getSession().removeAttribute("rentNowList");
+	}
+
+	//**********************************************************
+	//人気の本ランキングＴＯＰ5を取得するメソッド
 	//**********************************************************
 	public void top5(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		request.setCharacterEncoding("UTF-8");//文字コードを指定
-		HttpSession session = request.getSession();
-		//ＤＡＯのインスタンスを取得
-		LoginDAO kdao3 = new LoginDAO();
-
-		//ArrayListを作成して、クリア処理
-		List<BooksDTO> top5List = new ArrayList<>();
-		top5List.clear();
-
 		//daoのメソッドを実行
-		top5List = kdao3.getTop5();
+		List<BooksDTO>top5List = new LoginDAO().getTop5();
 
 		//人気ランキングTop5の一覧をセッションスコープに保存
-		//HttpSession session = request.getSession();
-		session.setAttribute("top5List", top5List);
+		request.getSession().setAttribute("top5List", top5List);
 	}
 
 }

@@ -58,23 +58,16 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		//RequestDispatcher dispatcher=("master.jsp");
-		//dispatcher.forward(request,response)
-		//RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/master.jsp");
-		//rd.forward(request, response);
 
 		String action = request.getParameter("action");
 
 		if (action.equals("done")) {
-			HttpSession session = request.getSession();
-			MasterDAO MasterDAO = new MasterDAO();
+
 			// データベース処理を行うDAOを生成
 			//MasterDAO MasterDAO = new MasterDAO();
 			List<RentlogsDTO> limitOverList = new ArrayList<>();
-			limitOverList = MasterDAO.getSearch();
-			session.setAttribute("limitOver", limitOverList);
+			limitOverList = new MasterDAO().getSearch();
+			request.getSession().setAttribute("limitOver", limitOverList);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/limitover.jsp");
 			dispatcher.forward(request, response);
 
@@ -90,8 +83,7 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//doGet(request, response);
+
 		HttpSession session = request.getSession();
 
 		// フォームからのデータを抽出
@@ -117,9 +109,6 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 			//gooleへ接続するため
 			URL url = null;
 			HttpURLConnection con = null;
-
-			//検索結果データ格納用
-			List<BooksDTO> list;
 
 			//FORMで押したボタン名の判別
 			String button = request.getParameter("button_name");
@@ -151,6 +140,7 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 				con.setRequestMethod("GET");//GETリクエスト
 				con.setReadTimeout(10000); // 10秒
 				con.setConnectTimeout(10000);// 10秒
+
 			} catch (Exception e) {
 				//例外発生時、error.jspへフォワードする
 				request.setAttribute("error", e.toString());
@@ -224,12 +214,11 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 				JSONArray jsonArray = jsonObject.getJSONArray("items");
 
 				//検索結果データの格納
-				list = new ArrayList<BooksDTO>();
+				List<BooksDTO> list = new ArrayList<BooksDTO>();
 
 				//実際に得られるデータ数
 				count = jsonArray.length();
 
-				//for (int i = 0; i < count; i++) {
 				//各検索結果
 				JSONObject item = jsonArray.getJSONObject(0);
 
@@ -243,9 +232,11 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 				//authorsの取得
 				JSONArray authors = null;
 				String author = null;
+
 				try {
 					authors = volumeInfo.getJSONArray("authors");
 					author = authors.getString(0);
+
 				} catch (JSONException e) {
 					author = "未登録";
 				}
@@ -263,7 +254,7 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 					image = "未登録";
 				}
 
-				//publisherの取得
+				//publisherの取得**********************************************************
 				String publisher = null;
 				try {
 					publisher = volumeInfo.getString("publisher");
@@ -272,7 +263,7 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 					publisher = "未登録";
 				}
 
-				//descriptionの取得
+				//descriptionの取得**********************************************************
 				String description = null;
 				try {
 					description = volumeInfo.getString("description");
@@ -281,10 +272,9 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 					description = "未登録";
 				}
 
-				//検索結果データの追加
+				//検索結果データの追加**********************************************************
 				BooksDTO BooksDTO1 = new BooksDTO(book_id, jan, book_name, pur_date, rent_check, image,
 						publisher, author, description);
-				//}
 
 				//disp.jspへ渡すデータを格納
 				session.setAttribute("result", BooksDTO1);
@@ -306,147 +296,98 @@ public class MasterServlet extends HttpServlet implements EnvSet {
 		//登録ユーザー(従業員)の一覧
 		//**********************************************************
 		case "staffAll":
-			//ＤＡＯのインスタンスを取得
-			MasterDAO kdao1 = new MasterDAO();
-
-			//ArrayListを作成して、クリア処理
-			List<StaffsDTO> staffsListAll = new ArrayList<>();
-			staffsListAll.clear();
 
 			//メソッドallStaffsList()を実行
-			staffsListAll = kdao1.allStaffsList();
+			List<StaffsDTO> staffsListAll = new MasterDAO().allStaffsList();
 
 			//全従業員の一覧をセッションスコープに保存
-			//			HttpSession session = request.getSession();
 			session.setAttribute("staffsListAll", staffsListAll);
-			//フォワードを実行
-			RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/WEB-INF/jsp/stafflist.jsp");
-			dispatcherLogin.forward(request, response);
+
+			//フォワードするメソッドを実行
+			doForward(request, response, "/WEB-INF/jsp/stafflist.jsp");
+
 			break;
 
 		//**********************************************************
 		//管理者ページに戻る
 		//**********************************************************
 		case "tomaster":
-			//フォワードを実行
-			RequestDispatcher dispatcherLogin1 = request.getRequestDispatcher("/WEB-INF/jsp/mastermain.jsp");
-			dispatcherLogin1.forward(request, response);
+			//フォワードするメソッドを実行
+			doForward(request, response, "/WEB-INF/jsp/mastermain.jsp");
 			break;
 
 		//**********************************************************
 		//全本の一覧表示テスト
 		//**********************************************************
 		case "booksAll":
-			//ＤＡＯのインスタンスを取得
-			MasterDAO kdao2 = new MasterDAO();
-
-			//ArrayListを作成して、クリア処理
-			List<BooksDTO> booksListAll = new ArrayList<>();
-			booksListAll.clear();
 
 			//メソッドallStaffsList()を実行
-			booksListAll = kdao2.allBooksList();
+			List<BooksDTO> booksListAll = new MasterDAO().allBooksList();
 
 			//全従業員の一覧をセッションスコープに保存
-			//HttpSession session = request.getSession();
 			session.setAttribute("booksListAll", booksListAll);
-			//フォワードを実行
-			RequestDispatcher dispatcherLogin2 = request.getRequestDispatcher("/WEB-INF/jsp/showbooksall.jsp");
-			dispatcherLogin2.forward(request, response);
+
+			//フォワードするメソッドを実行
+			doForward(request, response, "/WEB-INF/jsp/showbooksall.jsp");
+
 			break;
 
 		//**********************************************************
 		//全貸出履歴リスト
 		//**********************************************************
 		case "rentAll":
-			//ＤＡＯのインスタンスを取得
-			MasterDAO kdao4 = new MasterDAO();
-
-			//ArrayListを作成して、クリア処理
-			List<ForListDTO> rentlogsAll = new ArrayList<>();
-			rentlogsAll.clear();
 
 			//メソッドallStaffsList()を実行
-			rentlogsAll = kdao4.rentLogsAllList();
+			List<ForListDTO> rentlogsAll = new MasterDAO().rentLogsAllList();
 
 			//全従業員の一覧をセッションスコープに保存
-			//HttpSession session = request.getSession();
 			session.setAttribute("rentlogsAll", rentlogsAll);
-			//フォワードを実行
-			RequestDispatcher dispatcherLogin3 = request.getRequestDispatcher("/WEB-INF/jsp/rentall.jsp");
-			dispatcherLogin3.forward(request, response);
+
+			//フォワードするメソッドを実行
+			doForward(request, response, "/WEB-INF/jsp/rentall.jsp");
+
 			break;
 
 		//**********************************************************
 		//全貸出中リスト
 		//**********************************************************
 		case "rentnow":
-			//ＤＡＯのインスタンスを取得
-			MasterDAO kdao5 = new MasterDAO();
-
-			//ArrayListを作成して、クリア処理
-			List<ForListDTO> rentNowAll = new ArrayList<>();
-			rentNowAll.clear();
 
 			//メソッドallStaffsList()を実行
-			rentNowAll = kdao5.rentNowAllList();
+			List<ForListDTO> rentNowAll = new MasterDAO().rentNowAllList();
 
 			//全従業員の一覧をセッションスコープに保存
-			//HttpSession session = request.getSession();
 			session.setAttribute("rentNowAll", rentNowAll);
-			//フォワードを実行
-			RequestDispatcher dispatcherLogin4 = request.getRequestDispatcher("/WEB-INF/jsp/rentnow.jsp");
-			dispatcherLogin4.forward(request, response);
+
+			//フォワードするメソッドを実行
+			doForward(request, response, "/WEB-INF/jsp/rentnow.jsp");
+
 			break;
 
 		//**********************************************************
 		//２週間以上借りているリスト
 		//**********************************************************
 		case "2weeks":
-			//ＤＡＯのインスタンスを取得
-			MasterDAO kdao6 = new MasterDAO();
-
-			//ArrayListを作成して、クリア処理
-			List<ForListDTO> overRentList = new ArrayList<>();
-			overRentList.clear();
 
 			//メソッドallStaffsList()を実行
-			overRentList = kdao6.overRent();
+			List<ForListDTO> overRentList = new MasterDAO().overRent();
 
 			//全従業員の一覧をセッションスコープに保存
-			//HttpSession session = request.getSession();
 			session.setAttribute("overRentList", overRentList);
-			//フォワードを実行
-			RequestDispatcher dispatcherLogin5 = request.getRequestDispatcher("/WEB-INF/jsp/2week.jsp");
-			dispatcherLogin5.forward(request, response);
+
+			//フォワードするメソッドを実行
+			doForward(request, response, "/WEB-INF/jsp/2week.jsp");
 			break;
-
 		}
-
 	}
 
-	// 抽出されたデータを利用してJavaBeansを生成
-	//BooksDTO BooksDTO = new BooksDTO(Integer.parseInt(book_id),jan,book_name,pur_date,rent_check);
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	//フォワードを実行するメソッド
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	public void doForward(HttpServletRequest request, HttpServletResponse response, String forwardPath)
+			throws ServletException, IOException {
+		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
+		dispatcher.forward(request, response);
 
-	// 生成したJavaBeansをセッションスコープに保存(JSPファイルで共有するため)
-	//session.setAttribute("books", BooksDTO);
-
-	// データベース処理を行うDAOを生成
-	//MasterDAO MasterDAO = new MasterDAO();
-
-	//String forwardPath = "";
-
-	// DAO内に定義されているデータ登録用のメソッドを実行し、その結果を保存
-	//boolean isInsert = MasterDAO.insert(BooksDTO);
-
-	// メソッドの実行結果によって、切り替えるJSPファイル名を決定
-	//if (isInsert) {
-	//forwardPath = "/WEB-INF/jsp/addsuccess.jsp";
-	//} else {
-	//	forwardPath ="/WEB-INF/jsp/addfailure.jsp";
-	//}
-
-	// JSPファイルに処理を切り替え
-	//RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
-	//dispatcher.forward(request, response);
+	}
 }

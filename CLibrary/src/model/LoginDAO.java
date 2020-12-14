@@ -17,37 +17,23 @@ import dto.StaffsDTO;
 public class LoginDAO {
 
 	//ＤＢ接続情報の設定
-	//final String URL = "jdbc:mysql://localhost:3306/project?serverTimezone=JST";
-	// 	final String USER="javauser";
-	//	final String PASS="java06pass";
-
-//	final String URL = "jdbc:mysql://172.16.71.108:3306/sampledb?serverTimezone=JST";
-//	final String USER = "CLibary";
-//	final String PASS = "CLibrary01";
-
-	//	final String URL = "jdbc:mysql://localhost:3306/mykura?serverTimezone=JST";
-	//	final String USER = "mychi";
-	//	final String PASS = "dgnkiglow60";
-
-	//ＤＢ接続用
-		final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
-		final String USER = "team1";
-		final String PASS = "CLibrary";
+	final String URL = "jdbc:mysql://localhost:3306/project?serverTimezone=JST";
+	final String USER = "javauser";
+	final String PASS = "java06pass";
 
 	//ＳＱＬ文
 	final String SQL = "select * from rentlogs join books on rentlogs.book_id=books.book_id join staffs on rentlogs.staff_id=staffs.staff_id";
-
 	final String LOGIN_SQL = "select staff_id,mail,pass,name,gender from staffs where mail=? && pass=?";//ログイン用
 	final String REGISTER_SQL = "insert into staffs(mail,pass,name,gender) values(?,?,?,?)";//新規登録用
 	final String PROFILE_SQL = "select staff_id,mail,pass,name,gender from staffs where name=? && mail=? && pass=? && gender=?";
 	final String MYPAGE_WHERE = " where mail=? && pass=? && rent_check=1 &&  return_date is null";
 	final String CANRENT_SQL = "select * from books where rent_check=0";
-	//人気の本ランキングＴＯＰ３
-		final String SQL4 = "select book_name,jan,count(*) from rentlogs join books on rentlogs.book_id=books.book_id group by jan order by count(*) desc limit 5";
+	//人気の本ランキングＴＯＰ5
+	final String SQL4 = "select book_name,jan,count(*) from rentlogs join books on rentlogs.book_id=books.book_id group by jan order by count(*) desc limit 5";
 
-	//**********************************************************************************************************************************
+	//*************************************************************
 	//ログイン認証
-	//**********************************************************************************************************************************
+	//*************************************************************
 	public boolean connectLogin(String mail, String pass) {
 		//DBに接続して、ログイン可能かどうかのチェック
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
@@ -58,13 +44,13 @@ public class LoginDAO {
 			pstm.setString(2, pass);//パスワード
 
 			//SQL文の実行(ResultSetの取得)
-			ResultSet rs1 = pstm.executeQuery();
+			ResultSet rs = pstm.executeQuery();
 
 			//ResultSetのフェッチ処理
-			if (rs1.next()) {
+			if (rs.next()) {
 				//各列のデータをDTOにセッターを使って保存
-				String mail1 = rs1.getString("mail");//メールアドレス
-				String pass1 = rs1.getString("pass");//パスワード
+				String mail1 = rs.getString("mail");//メールアドレス
+				String pass1 = rs.getString("pass");//パスワード
 				if (mail.equals(mail1) && pass.equals(pass1)) {
 					return true;
 				} else {
@@ -81,7 +67,7 @@ public class LoginDAO {
 	//**********************************************************
 	//ログインしたユーザーの情報を取得する
 	//**********************************************************
-	public StaffsDTO getLoginDAO(String mail, String pass) {
+	public StaffsDTO getLoginUser(String mail, String pass) {
 
 		//DBに接続して、ログイン可能かどうかのチェック
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
@@ -95,14 +81,14 @@ public class LoginDAO {
 			pstm.setString(2, pass);//パスワード
 
 			//SQL文の実行(ResultSetの取得)
-			ResultSet rs1 = pstm.executeQuery();
-			if (rs1.next()) {
+			ResultSet rs = pstm.executeQuery();
+			if (rs.next()) {
 				//各列のデータをDTOにセッターを使って保存
-				int staff_id = rs1.getInt("staff_id"); //ＩＤ
-				String mail1 = rs1.getString("mail");//メールアドレス
-				String pass1 = rs1.getString("pass");//パスワード
-				String name = rs1.getString("name");//名前
-				int gender = rs1.getInt("gender");//性別
+				int staff_id = rs.getInt("staff_id"); //ＩＤ
+				String mail1 = rs.getString("mail");//メールアドレス
+				String pass1 = rs.getString("pass");//パスワード
+				String name = rs.getString("name");//名前
+				int gender = rs.getInt("gender");//性別
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
 				sd2 = new StaffsDTO(staff_id, mail1, pass1, name, gender);
@@ -157,19 +143,19 @@ public class LoginDAO {
 			pstm.setInt(4, gender);//性別
 
 			//SQL文の実行(ResultSetの取得)
-			ResultSet rs2 = pstm.executeQuery();
+			ResultSet rs = pstm.executeQuery();
 
 			//staffsDTOのインスタンスを生成
 			StaffsDTO sd = new StaffsDTO();
 
 			//ResultSetのフェッチ処理
-			while (rs2.next()) {
+			while (rs.next()) {
 				//各列のデータをDTOにセッターを使って保存
-				int staff_id = rs2.getInt("staff_id"); //ＩＤ
-				mail = rs2.getString("mail");//メールアドレス
-				pass = rs2.getString("pass");//パスワード
-				name = rs2.getString("name");//名前
-				gender = rs2.getInt("gender");//性別
+				int staff_id = rs.getInt("staff_id"); //ＩＤ
+				mail = rs.getString("mail");//メールアドレス
+				pass = rs.getString("pass");//パスワード
+				name = rs.getString("name");//名前
+				gender = rs.getInt("gender");//性別
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
 				sd = new StaffsDTO(staff_id, mail, pass, name, gender);
@@ -181,9 +167,9 @@ public class LoginDAO {
 		}
 	}
 
-	//*********************************************************************************************
-		//ユーザーが現在借りている本リストを取得するメソッド
-		//*********************************************************************************************
+	//********************************************************************
+	//ユーザーが現在借りている本リストを取得するメソッド
+	//********************************************************************
 	public List<ForListDTO> getRentNowListDAO(String mail, String pass) {
 
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
@@ -194,21 +180,21 @@ public class LoginDAO {
 			pstm.setString(2, pass);//パスワード
 
 			//SQL文の実行(ResultSetの取得)
-			ResultSet rs3 = pstm.executeQuery();
+			ResultSet rs = pstm.executeQuery();
 
 			//ArrayListの宣言
 			List<ForListDTO> bookList = new ArrayList<>();
 			bookList.clear();
 
 			//ResultSetのフェッチ処理
-			while (rs3.next()) {
+			while (rs.next()) {
 				//各列のデータをDTOにセッターを使って保存
-				String bookName = rs3.getString("book_name"); //本の名前
-				int rentId = rs3.getInt("rent_id");//貸し出し履歴ID
-				Date rentDate = rs3.getDate("rentlogs.rent_date");//貸出日
-				Date returnDate = rs3.getDate("rentlogs.return_date");//返却日
-				int bookId = rs3.getInt("rentlogs.book_id");//書籍ID
-				int staffId = rs3.getInt("rentlogs.staff_id");//社員ID
+				String bookName = rs.getString("book_name"); //本の名前
+				int rentId = rs.getInt("rent_id");//貸し出し履歴ID
+				Date rentDate = rs.getDate("rentlogs.rent_date");//貸出日
+				Date returnDate = rs.getDate("rentlogs.return_date");//返却日
+				int bookId = rs.getInt("rentlogs.book_id");//書籍ID
+				int staffId = rs.getInt("rentlogs.staff_id");//社員ID
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
 				ForListDTO fld = new ForListDTO(bookName, rentId, rentDate, returnDate, bookId, staffId);
@@ -229,27 +215,27 @@ public class LoginDAO {
 				PreparedStatement pstm = conn.prepareStatement(CANRENT_SQL)) {
 
 			//SQL文の実行(ResultSetの取得)
-			ResultSet rs4 = pstm.executeQuery();
+			ResultSet rs = pstm.executeQuery();
 
 			//staffsDTOのインスタンスを生成
-			ForListDTO fld1 = new ForListDTO();
+			ForListDTO fld = new ForListDTO();
 
 			//ArrayListの宣言
 			List<ForListDTO> bookList1 = new ArrayList<>();
 			bookList1.clear();
 
 			//ResultSetのフェッチ処理
-			while (rs4.next()) {
+			while (rs.next()) {
 				//各列のデータをDTOにセッターを使って保存
-//				int staffId = rs4.getInt("staffs.staff_id"); //社員ＩＤ
-				int bookId = rs4.getInt("books.book_id");//書籍ＩＤ
-				String jan = rs4.getString("jan");//ＪＡＮ
-				String bookName = rs4.getString("book_name");//本の名前
-				int rentCheck = rs4.getInt("rent_check");//貸出ステータス
+				//				int staffId = rs4.getInt("staffs.staff_id"); //社員ＩＤ
+				int bookId = rs.getInt("books.book_id");//書籍ＩＤ
+				String jan = rs.getString("jan");//ＪＡＮ
+				String bookName = rs.getString("book_name");//本の名前
+				int rentCheck = rs.getInt("rent_check");//貸出ステータス
 
 				//取り出したレコードを保存するためのDTOオブジェクトの生成
-				fld1 = new ForListDTO(bookId, jan, bookName, rentCheck);
-				bookList1.add(fld1);
+				fld = new ForListDTO(bookId, jan, bookName, rentCheck);
+				bookList1.add(fld);
 			}
 			return bookList1;
 
@@ -257,34 +243,35 @@ public class LoginDAO {
 			return null;
 		}
 	}
+
 	//**********************************************************
-		//★人気の本ランキングＴＯＰ5
-		//**********************************************************
-		public List<BooksDTO> getTop5() {
-			try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
-					Statement stm = conn.createStatement()) {
+	//人気の本ランキングＴＯＰ5
+	//**********************************************************
+	public List<BooksDTO> getTop5() {
+		try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
+				Statement stm = conn.createStatement()) {
 
-				//ArrayListを準備
-				List<BooksDTO> list3 = new ArrayList<>();
-				list3.clear();
+			//ArrayListを準備
+			List<BooksDTO> list = new ArrayList<>();
+			list.clear();
 
-				//SQL文を実行してResultSetに格納
-				ResultSet rs3 = stm.executeQuery(SQL4);
+			//SQL文を実行してResultSetに格納
+			ResultSet rs = stm.executeQuery(SQL4);
 
-				//１行ずつ取り出す
-				while (rs3.next()) {
-					String bookName = rs3.getString("book_name");//本の名前
-					String jan = rs3.getString("jan");//ＪＡＮ
-					String bbb=null;
-					//BooksDTOコンストラクタに引数を渡す
-					BooksDTO bd2 = new BooksDTO(bookName, jan,bbb);
-					//ArrayListに追加していく
-					list3.add(bd2);
-				}
-				return list3;
-
-			} catch (SQLException e) {
-				return null;
+			//１行ずつ取り出す
+			while (rs.next()) {
+				String bookName = rs.getString("book_name");//本の名前
+				String jan = rs.getString("jan");//ＪＡＮ
+				String bbb = null;
+				//BooksDTOコンストラクタに引数を渡す
+				BooksDTO bd2 = new BooksDTO(bookName, jan, bbb);
+				//ArrayListに追加していく
+				list.add(bd2);
 			}
+			return list;
+
+		} catch (SQLException e) {
+			return null;
 		}
+	}
 }

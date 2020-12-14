@@ -2,7 +2,6 @@ package servlet;
 
 //本を検索するサーブレット
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -11,7 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import dto.BooksDTO;
 import model.BookSearchDAO;
@@ -28,7 +26,7 @@ public class BookSearchServlet extends HttpServlet {
 	 */
 	public BookSearchServlet() {
 		super();
-		// TODO Auto-generated constructor stub
+
 	}
 
 	/**
@@ -62,32 +60,47 @@ public class BookSearchServlet extends HttpServlet {
 
 	}
 
-	//**********************************************************
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 	//あいまい検索Mypageより
-	//**********************************************************
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 	public void toLikeSearch(String text, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		BookSearchDAO kd = new BookSearchDAO();
-		List<BooksDTO> searchResult = new ArrayList<>();
-		searchResult = kd.likeSearchDAO(text);
-		HttpSession session = request.getSession();
-		session.setAttribute("searchResult", searchResult);
-		RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/WEB-INF/jsp/searchResultMypage.jsp");
-		dispatcherLogin.forward(request, response);
+
+		//BookSearchDAOのメソッドを実行してArrayListを取得
+		List<BooksDTO> searchResult = new BookSearchDAO().likeSearchDAO(text);
+
+		//セッションスコープに保存
+		request.getSession().setAttribute("searchResult", searchResult);
+
+		//フォワードするメソッドを実行（searchResultMypage.jspへ）
+		doForward(request, response, "/WEB-INF/jsp/searchResultMypage.jsp");
+
 	}
 
-	//**********************************************************
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 	//あいまい検索Mainより
-	//**********************************************************
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 	public void toLikeSearch2(String text2, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		BookSearchDAO kd = new BookSearchDAO();
-		List<BooksDTO> searchResult2 = new ArrayList<>();
-		searchResult2 = kd.likeSearchDAO2(text2);
-		HttpSession session = request.getSession();
-		session.setAttribute("searchResult2", searchResult2);
-		RequestDispatcher dispatcherLogin = request.getRequestDispatcher("/WEB-INF/jsp/searchResultMain.jsp");
-		dispatcherLogin.forward(request, response);
+
+		//likeSearchDAO2を実行し、ArrayListを取得
+		List<BooksDTO> searchResult2 = new BookSearchDAO().likeSearchDAO2(text2);
+
+		//セッションスコープに保存
+		request.getSession().setAttribute("searchResult2", searchResult2);
+
+		//フォワードするメソッドを実行（searchResultMain.jspへ）
+		doForward(request, response, "/WEB-INF/jsp/searchResultMain.jsp");
+	}
+
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	//フォワードを実行するメソッド
+	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	public void doForward(HttpServletRequest request, HttpServletResponse response, String forwardPath)
+			throws ServletException, IOException {
+		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
+		dispatcher.forward(request, response);
+
 	}
 
 }

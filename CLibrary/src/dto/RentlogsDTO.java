@@ -3,36 +3,60 @@ package dto;
 import java.io.Serializable;
 
 public class RentlogsDTO implements Serializable{
-	private int rent_id;
-	private String rent_date;
-	private String return_date;
-    private int book_id;
-    private int staff_id;
+	private int rentId;
+	private String rentDate;
+	private String returnDate;
+    private int bookId;
+    private int staffId;
 
+    //**********************************************************
+    //コンストラクタ
+    //**********************************************************
 	public RentlogsDTO() {}
-	public RentlogsDTO(int rent_id, String rent_date,String return_date,int book_id,int staff_id) {
-		this.rent_id=rent_id;
-		this.rent_date=rent_date;
-		this.return_date=return_date;
-		this.book_id=book_id;
-		this.staff_id=staff_id;
+	public RentlogsDTO(int rentId, String rentDate,String returnDate,int bookId,int staffId) {
+		this.rentId=rentId;
+		this.rentDate=rentDate;
+		this.returnDate=returnDate;
+		this.bookId=bookId;
+		this.staffId=staffId;
 
+	}
+	//**********************************************************
+	//getter
+	//**********************************************************
+	public int getRentId() {
+		return rentId;
+	}
+	public String getRentDate() {
+		return rentDate;
+	}
+	public String getReturnDate(){
+		return returnDate;
+	}
+	public int getBookId() {
+		return bookId;
+	}
+	public int getStaffId() {
+		return staffId;
+	}
 
+	//**********************************************************
+	//setter
+	//**********************************************************
+	public void setRentId() {
+		this.rentId=rentId;
 	}
-	public int getRent_Id() {
-		return rent_id;
+	public void setRentDate() {
+		this.rentDate=rentDate;
 	}
-	public String getRent_Date() {
-		return rent_date;
+	public void setReturnDate() {
+		this.returnDate=returnDate;
 	}
-	public String getReturn_Date(){
-		return return_date;
+	public void setBookId() {
+		this.bookId=bookId;
 	}
-	public int getBook_Id() {
-		return book_id;
-	}
-	public int getStaff_Id() {
-		return staff_id;
+	public void setStaffId() {
+		this.staffId=staffId;
 	}
 
 

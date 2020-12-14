@@ -5,11 +5,11 @@ import java.util.Date;
 
 
 public class BooksDTO implements Serializable{
-	private int book_id;
+	private int bookId;
 	private String jan;
-	private String book_name;
-	private String pur_date;
-    private int rent_check;
+	private String bookName;
+	private String purDate;
+    private int rentCheck;
     private String image;
     private String publisher;
     private String author;
@@ -17,13 +17,13 @@ public class BooksDTO implements Serializable{
 
 
 	public BooksDTO() {}
-	public BooksDTO(int book_id,String jan, String book_name,String pur_date, int rent_check,String image,
+	public BooksDTO(int bookId,String jan, String bookName,String purDate, int rentCheck,String image,
 			String publisher,String author,String description) {
-		this.book_id=book_id;
+		this.bookId=bookId;
 		this.jan=jan;
-		this.book_name=book_name;
-		this.pur_date=pur_date;
-		this.rent_check=rent_check;
+		this.bookName=bookName;
+		this.purDate=purDate;
+		this.rentCheck=rentCheck;
 		this.image=image;
 		this.publisher=publisher;
 		this.author=author;
@@ -31,25 +31,25 @@ public class BooksDTO implements Serializable{
 
 	}
 	//★人気ランキングＴＯＰ3
-		public BooksDTO(String book_name,String jan,String bbb) {
+		public BooksDTO(String bookName,String jan,String bbb) {
 			this.jan=jan;
-			this.book_name=book_name;
+			this.bookName=bookName;
 		}
 
-	public BooksDTO(String book_name, String image) {
-		this.book_name = book_name;
+	public BooksDTO(String bookName, String image) {
+		this.bookName = bookName;
 		this.image = image;
 	}
-	public BooksDTO(int book_id, String jan, String book_name, Date pur_date, int rent_check){
-		this.book_id=book_id;
+	public BooksDTO(int bookId, String jan, String bookName, Date purDate, int rentCheck){
+		this.bookId=bookId;
 		this.jan=jan;
-		this.book_name=book_name;
-		this.pur_date=String.valueOf(pur_date);
-		this.rent_check=rent_check;
+		this.bookName=bookName;
+		this.purDate=String.valueOf(purDate);
+		this.rentCheck=rentCheck;
 	}
 
-	public int getBook_Id() {
-		return book_id;
+	public int getBookId() {
+		return bookId;
 	}
     public String getJan(){
 		return jan;
@@ -57,17 +57,20 @@ public class BooksDTO implements Serializable{
     public void setJan(String jan) {
     	this.jan=jan;
     }
-	public String getBook_Name() {
-		return book_name;
+	public String getBookName() {
+		return bookName;
 	}
-	public void setBook_Name(String book_name) {
-		this.book_name=book_name;
+	public void setBookName(String bookName) {
+		this.bookName=bookName;
 	}
-	public String getPur_Date() {
-		return pur_date;
+	public String getPurDate() {
+		return purDate;
 	}
-	public int getRent_Check() {
-		return rent_check;
+	public int getRentCheck() {
+		return rentCheck;
+	}
+	public void setRentCheck(int rentCheck) {
+		this.rentCheck=rentCheck;
 	}
 	public String getImage() {
 		return image;

@@ -76,21 +76,24 @@ public class ForListDTO implements java.io.Serializable {
 		schedule = java.sql.Date.valueOf(rentDate.toLocalDate().plusDays(14));
 
 	}
-	//借りられる本のリスト（4）
-	 public ForListDTO(int bookId, String jan, String bookName, int rentCheck) {
-		 this.bookId = bookId;
-		 this.jan = jan;
-		 this.bookName = bookName;
-		 this.rentCheck = rentCheck;
 
-	 }
+	//借りられる本のリスト（4）
+	public ForListDTO(int bookId, String jan, String bookName, int rentCheck) {
+		this.bookId = bookId;
+		this.jan = jan;
+		this.bookName = bookName;
+		this.rentCheck = rentCheck;
+	}
+
 	//２週間以上超えている人のリスト用
 	public ForListDTO(Date rentDate) {
 		//貸し出し日に+14日して、返却予定日を計算
 		schedule = java.sql.Date.valueOf(rentDate.toLocalDate().plusDays(14));
-
 	}
 
+	//**********************************************************
+	//getter
+	//**********************************************************
 	public int getBookId() {
 		return bookId;
 	}
@@ -145,5 +148,65 @@ public class ForListDTO implements java.io.Serializable {
 
 	public Date getSchedule() {
 		return schedule;
+	}
+
+	//**********************************************************
+	//setter
+	//**********************************************************
+	public void setBookId() {
+		this.bookId = bookId;
+	}
+
+	public void setJan() {
+		this.jan = jan;
+	}
+
+	public void setBookName() {
+		this.bookName = bookName;
+	}
+
+	public void setPurDate() {
+		this.purDate = purDate;
+	}
+
+	public void setRentCheck() {
+		this.rentCheck = rentCheck;
+	}
+
+	public void setRentId() {
+		this.rentId = rentId;
+	}
+
+	public void setRentDate() {
+		this.rentDate = rentDate;
+	}
+
+	public void setReturnDate() {
+		this.returnDate = returnDate;
+	}
+
+	public void setStaffId() {
+		this.staffId = staffId;
+	}
+
+	public void setMail() {
+		this.mail = mail;
+	}
+
+	public void setPass() {
+		this.pass = pass;
+	}
+
+	public void setName() {
+		this.name = name;
+	}
+
+	public void setGender() {
+		this.gender = gender;
+	}
+
+	public void setSchedule() {
+		//貸し出し日に+14日して、返却予定日を計算
+		schedule = java.sql.Date.valueOf(rentDate.toLocalDate().plusDays(14));
 	}
 }

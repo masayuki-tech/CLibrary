@@ -1,9 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -12,7 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import dto.BooksDTO;
 import model.BooksDAO;
@@ -37,65 +33,41 @@ public class WelcomeServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		//ＤＢ接続用
-				final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
-				final String USER = "team1";
-				final String PASS = "CLibrary";
-
 		// URLエンコーディングの文字コードを設定
 		request.setCharacterEncoding("utf-8");
-
-		String forword = ""; //フォワード先を指定
-
-		// DB接続処理は例外処理が必須
-		try (Connection conn = DriverManager.getConnection(URL, USER, PASS)) {
-			forword = "index.jsp";//フォワード先をトップ画面に指定
-
-		} catch (SQLException e) {
-			forword = "fail.jsp";// 接続に失敗した場合、fall.jspファイルにフォワード
-		}
-		//フォワードを実行するメソッド
-		doForword(request, response, forword);
+		//フォワードを実行するメソッド（トップ画面へ）
+		doForword(request, response,"index.jsp");
 	}
+
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		//ＤＢ接続用
-				final String URL = "jdbc:mysql://172.16.71.116:3306/clibrary?serverTimezone=JST";
-				final String USER = "team1";
-				final String PASS = "CLibrary";
-
-		String forword = "";//フォワード先を指定
-
 		// URLエンコーディングの文字コードを設定
 		request.setCharacterEncoding("utf-8");
 
-		// name="target"のデータを抽出(どこからの通信かをチェックする)
+		//targetパラメータを取得
 		String target = request.getParameter("target");
 
 		// アクセス元のページによって処理を分岐
 		switch (target) {
 		case "register": //新規登録画面にフォワード
-			forword = "/CLibrary/LoginServlet";// フォワード先を指定
+			doForword(request, response,"/CLibrary/LoginServlet");
 			break;
 
 		case "login": // ログイン画面にフォワード
-			forword = "/CLibrary/LoginServlet";// フォワード先を指定
+			doForword(request, response, "/CLibrary/LoginServlet");
 			break;
 
 		case "select": // target=serectの場合
 			List<BooksDTO> booksAllList = BooksDAO.showBooks();
-			HttpSession session = request.getSession();
-			session.setAttribute("booksAllList", booksAllList);
-			forword = "/WEB-INF/jsp/show.jsp";// フォワード先を指定
+			request.getSession().setAttribute("booksAllList", booksAllList);
+			doForword(request, response, "/WEB-INF/jsp/show.jsp");
 			break;
 		}
-		//フォワードを実行するメソッド
-		doForword(request, response, forword);
 	}
 
 	//ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
