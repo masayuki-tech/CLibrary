@@ -77,6 +77,7 @@ public class BooksDTO implements Serializable{
 	}
 	public void setImage(String image) {
 		this.image=image;
+
 	}
 	public String getPublisher() {
 		return publisher;
